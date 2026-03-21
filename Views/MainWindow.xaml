@@ -1,0 +1,26 @@
+﻿<Window x:Class="QuanLyKhachHang.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quản lý Khách Hàng" Height="650" Width="900">
+    <Grid Margin="20">
+        <StackPanel>
+            <TextBlock Text="Mã khách hàng"/>
+            <TextBox x:Name="txtMaKH" IsReadOnly="True" Background="#F0F0F0" Margin="0,5,0,15"/>
+            
+            <TextBlock Text="Họ tên"/>
+            <TextBox x:Name="txtTenKH" Margin="0,5,0,15"/>
+
+            <TextBlock Text="Ngày sinh"/>
+            <DatePicker x:Name="dpNgaySinh" Margin="0,5,0,15"/>
+
+            <TextBlock Text="Mã người giám hộ" Margin="0,20,0,0"/>
+            <TextBox x:Name="txtMaGH" IsReadOnly="True" Background="#F0F0F0" Margin="0,5,0,15"/>
+            
+            <TextBlock Text="Họ tên người giám hộ"/>
+            <TextBox x:Name="txtTenGH" Margin="0,5,0,15"/>
+
+            <Button Content="Tiếp nhận khách hàng" Click="BtnTiepNhan_Click" Height="40" Margin="0,20,0,0"/>
+            <Button Content="Khách hàng mới" Click="BtnKhachHangMoi_Click" Height="40" Margin="0,10,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

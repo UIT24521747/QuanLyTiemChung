@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="MySql.Data" Version="9.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\MainWindow.xaml" />
+    <Compile Remove="Views\MainWindow.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <None Update=".env">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+  </ItemGroup>
+</Project>
