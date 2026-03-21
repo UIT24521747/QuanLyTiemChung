@@ -1,1 +1,6 @@
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
 .env
