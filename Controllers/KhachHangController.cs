@@ -35,10 +35,16 @@ namespace QuanLyKhachHang.Controllers
             {
                 if (gh == null || string.IsNullOrWhiteSpace(gh.TenGH))
                     throw new Exception($"Quy định: Khách hàng dưới {tuoiQuyDinh} tuổi bắt buộc phải có thông tin người giám hộ!");
+
+                if (string.IsNullOrWhiteSpace(gh.MaGH))
+                    gh.MaGH = kh.MaGH;
+
+                kh.MaGH = gh.MaGH;
             }
             else
             {
                 gh = null;
+                kh.MaGH = null;
             }
 
             if (isUpdate)
@@ -66,6 +72,11 @@ namespace QuanLyKhachHang.Controllers
         public KhachHangDTO? GetKhachHangById(string maKH)
         {
             return _model.GetKhachHangById(maKH);
+        }
+
+        public (KhachHangDTO? KhachHang, NguoiGiamHoDTO? NguoiGiamHo) GetKhachHangWithNguoiGiamHoById(string maKH)
+        {
+            return _model.GetKhachHangWithNguoiGiamHoById(maKH);
         }
     }
 }

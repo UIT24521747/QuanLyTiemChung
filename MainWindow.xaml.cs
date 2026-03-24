@@ -39,7 +39,7 @@ namespace QuanLyKhachHang
 
             txtError.Text = "";
             _isEditMode = false;
-            btn1.Content = "(1) Tiếp nhận";
+            btn1.Content = "Tiếp nhận";
         }
 
         private void Btn1_Click(object sender, RoutedEventArgs e)
@@ -125,7 +125,9 @@ namespace QuanLyKhachHang
                 if (string.IsNullOrWhiteSpace(maKH))
                     return;
 
-                var kh = _controller.GetKhachHangById(maKH);
+                var result = _controller.GetKhachHangWithNguoiGiamHoById(maKH);
+                var kh = result.KhachHang;
+                var gh = result.NguoiGiamHo;
                 if (kh == null)
                 {
                     MessageBox.Show($"Không tìm thấy khách hàng!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -142,8 +144,17 @@ namespace QuanLyKhachHang
                 dpNgaySinh.SelectedDate = kh.NgaySinh;
                 txtGioiTinh.Text = kh.GioiTinh ?? "";
 
-                btn1.Content = "(1) Cập nhật";
-                txtError.Text = "Đã tìm thấy. Hãy chỉnh sửa và nhấn Cập nhật hoặc nhấn (5).";
+                txtMaGH.Text = !string.IsNullOrWhiteSpace(kh.MaGH) ? kh.MaGH : _controller.GenerateMaGH();
+                txtTenGH.Text = gh?.TenGH ?? "";
+                txtSDT_GH.Text = gh?.SDT_GH ?? "";
+                txtEmail_GH.Text = gh?.Email_GH ?? "";
+                txtCCCD_GH.Text = gh?.CCCD_GH ?? "";
+                txtDiaChi_GH.Text = gh?.DiaChi_GH ?? "";
+                txtGioiTinh_GH.Text = gh?.GioiTinh_GH ?? "";
+                dpNgaySinh_GH.SelectedDate = gh?.NgaySinh_GH ?? DateTime.Now;
+
+                btn1.Content = "Cập nhật";
+                txtError.Text = "Đã tìm thấy. Hãy chỉnh sửa và nhấn Cập nhật.";
             }
             catch (Exception ex)
             {
@@ -185,7 +196,7 @@ namespace QuanLyKhachHang
                 MessageBox.Show("Vui lòng tìm khách hàng trước!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-            Btn1_Click(null, null);
+            Btn1_Click(this, new RoutedEventArgs());
         }
 
         private void Btn6_Click(object sender, RoutedEventArgs e)
@@ -198,8 +209,10 @@ namespace QuanLyKhachHang
             var dialog = new Window
             {
                 Title = "Nhập thông tin",
-                Width = 400,
-                Height = 150,
+                Width = 420,
+                MinHeight = 190,
+                SizeToContent = SizeToContent.Height,
+                ResizeMode = ResizeMode.NoResize,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 Owner = this,
                 Background = System.Windows.Media.Brushes.White
@@ -210,7 +223,7 @@ namespace QuanLyKhachHang
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            var label = new TextBlock { Text = prompt, Margin = new Thickness(15, 10, 15, 10) };
+            var label = new TextBlock { Text = prompt, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(15, 10, 15, 10) };
             Grid.SetRow(label, 0);
             grid.Children.Add(label);
 
