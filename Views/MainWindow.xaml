@@ -1,26 +1,275 @@
-﻿<Window x:Class="QuanLyKhachHang.MainWindow"
+<Window x:Class="QuanLyKhachHang.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Quản lý Khách Hàng" Height="650" Width="900">
-    <Grid Margin="20">
-        <StackPanel>
-            <TextBlock Text="Mã khách hàng"/>
-            <TextBox x:Name="txtMaKH" IsReadOnly="True" Background="#F0F0F0" Margin="0,5,0,15"/>
-            
-            <TextBlock Text="Họ tên"/>
-            <TextBox x:Name="txtTenKH" Margin="0,5,0,15"/>
+        Title="Hệ Thống Quản Lý Khách Hàng"
+        Width="780"
+        Height="860"
+        MinWidth="760"
+        MinHeight="760"
+        WindowStartupLocation="CenterScreen"
+        Background="#DDE4EE">
+    <Window.Resources>
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#202B3A"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
 
-            <TextBlock Text="Ngày sinh"/>
-            <DatePicker x:Name="dpNgaySinh" Margin="0,5,0,15"/>
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="BorderBrush" Value="#9AA5B4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
 
-            <TextBlock Text="Mã người giám hộ" Margin="0,20,0,0"/>
-            <TextBox x:Name="txtMaGH" IsReadOnly="True" Background="#F0F0F0" Margin="0,5,0,15"/>
-            
-            <TextBlock Text="Họ tên người giám hộ"/>
-            <TextBox x:Name="txtTenGH" Margin="0,5,0,15"/>
+        <Style x:Key="DateStyle" TargetType="DatePicker">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="BorderBrush" Value="#9AA5B4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
 
-            <Button Content="Tiếp nhận khách hàng" Click="BtnTiepNhan_Click" Height="40" Margin="0,20,0,0"/>
-            <Button Content="Khách hàng mới" Click="BtnKhachHangMoi_Click" Height="40" Margin="0,10,0,0"/>
-        </StackPanel>
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3A86FF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#3A86FF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#2F74E6"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#235EC0"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="66"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#2D3F56">
+            <TextBlock Text="HỆ THỐNG QUẢN LÝ KHÁCH HÀNG"
+                       Margin="24,14,0,0"
+                       Foreground="White"
+                       FontSize="41"
+                       FontWeight="Bold"/>
+        </Border>
+
+        <Border Grid.Row="1" Margin="14,14,14,14" Background="#F0F0F0" BorderBrush="#D2D6DC" BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="26,14,18,14">
+                    <TextBlock Text="Phiếu đăng ký thông tin khách hàng"
+                               FontSize="43"
+                               FontWeight="Bold"
+                               Foreground="#1F3045"
+                               Margin="0,0,0,18"/>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition Width="2.1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Mã khách hàng *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtMaKH" Style="{StaticResource InputStyle}" IsReadOnly="True" Background="#E9EEF6"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Họ tên *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtTenKH" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition Width="2.1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="SĐT *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtSDT" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Email" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtEmail" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Giới tính *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtGioiTinh" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Ngày sinh *" Style="{StaticResource FieldLabelStyle}"/>
+                            <DatePicker x:Name="dpNgaySinh" Style="{StaticResource DateStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="CCCD *" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtCCCD" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Margin="0,0,0,18">
+                        <TextBlock Text="Địa chỉ *" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="txtDiaChi" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Thông tin người giám hộ"
+                               FontSize="40"
+                               FontWeight="Bold"
+                               Foreground="#1F3045"
+                               Margin="0,10,0,10"/>
+
+                    <Border Background="#EBF0FA" BorderBrush="#E4EAF3" BorderThickness="1" Padding="12,7" Margin="0,0,0,12">
+                        <TextBlock Text="[i] Bắt buộc với người dưới 18 tuổi (trên 18 tuổi có thể bỏ qua)."
+                                   Foreground="#6F7D91"
+                                   FontSize="14"/>
+                    </Border>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition Width="2.1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Mã người giám hộ" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtMaGH" Style="{StaticResource InputStyle}" IsReadOnly="True" Background="#E9EEF6"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Họ tên người giám hộ" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtTenGH" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition Width="2.1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="SĐT" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtSDT_GH" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Email" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtEmail_GH" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Giới tính" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtGioiTinh_GH" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Ngày sinh" Style="{StaticResource FieldLabelStyle}"/>
+                            <DatePicker x:Name="dpNgaySinh_GH" Style="{StaticResource DateStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="CCCD" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox x:Name="txtCCCD_GH" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Margin="0,0,0,8">
+                        <TextBlock Text="Địa chỉ" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="txtDiaChi_GH" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,20">
+                        <TextBlock Text="Quan hệ với khách hàng" Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="txtQuanHe_GH" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <TextBlock x:Name="txtError"
+                               Foreground="#B91C1C"
+                               FontSize="14"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,14"/>
+
+                    <Grid Margin="0,6,0,8" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" x:Name="btn1" Content="Tiếp nhận khách hàng" Click="Btn1_Click" Style="{StaticResource ActionButtonStyle}"/>
+                        <Button Grid.Column="1" x:Name="btn2" Content="Khách hàng mới" Click="Btn2_Click" Style="{StaticResource ActionButtonStyle}"/>
+                        <Button Grid.Column="2" x:Name="btn3" Content="Tìm khách hàng" Click="Btn3_Click" Style="{StaticResource ActionButtonStyle}"/>
+                        <Button Grid.Column="3" x:Name="btn4" Content="Xóa khách hàng" Click="Btn4_Click" Style="{StaticResource ActionButtonStyle}"/>
+                        <Button Grid.Column="4" x:Name="btn5" Content="Cập nhật khách hàng" Click="Btn5_Click" Style="{StaticResource ActionButtonStyle}"/>
+                        <Button Grid.Column="5" x:Name="btn6" Content="Thoát" Click="Btn6_Click" Style="{StaticResource ActionButtonStyle}" Margin="0"/>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>

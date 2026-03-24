@@ -14,12 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Views\MainWindow.xaml" />
-    <Compile Remove="Views\MainWindow.xaml.cs" />
-    <Compile Remove="Views\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
       <None Update=".env">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
