@@ -19,8 +19,6 @@ namespace QuanLyKhachHang.Controllers
                 throw new Exception("Họ tên khách hàng không được để trống!");
             if (string.IsNullOrWhiteSpace(kh.SDT))
                 throw new Exception("Số điện thoại không được để trống!");
-            if (string.IsNullOrWhiteSpace(kh.Email))
-                throw new Exception("Email không được để trống!");
             if (string.IsNullOrWhiteSpace(kh.CCCD))
                 throw new Exception("CCCD không được để trống!");
             if (string.IsNullOrWhiteSpace(kh.DiaChi))

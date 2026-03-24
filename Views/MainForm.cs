@@ -1,17 +1,17 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 using QuanLyKhachHang.Controllers;
 using QuanLyKhachHang.DTOs;
 
 namespace QuanLyKhachHang
 {
-    public partial class MainWindow : Window
+    public partial class MainForm : Form
     {
         private KhachHangController _controller = new KhachHangController();
         private bool _isEditMode = false;
 
-        public MainWindow()
+        public MainForm()
         {
             InitializeComponent();
             ResetForm();
@@ -26,7 +26,7 @@ namespace QuanLyKhachHang
             txtCCCD.Text = "";
             txtDiaChi.Text = "";
             txtGioiTinh.Text = "";
-            dpNgaySinh.SelectedDate = DateTime.Now;
+            dpNgaySinh.Value = DateTime.Now;
 
             txtMaGH.Text = _controller.GenerateMaGH();
             txtTenGH.Text = "";
@@ -35,38 +35,38 @@ namespace QuanLyKhachHang
             txtCCCD_GH.Text = "";
             txtDiaChi_GH.Text = "";
             txtGioiTinh_GH.Text = "";
-            txtQuanHe_GH.Text = "";
-            dpNgaySinh_GH.SelectedDate = DateTime.Now;
+            dpNgaySinh_GH.Value = DateTime.Now;
+            txtQuanHe.Text = "";
 
-            txtError.Text = "";
+            lblError.Text = "";
             _isEditMode = false;
-            btn1.Content = "Tiếp nhận khách hàng";
+            btn1.Text = "Tiếp nhận";
         }
 
-        private void Btn1_Click(object sender, RoutedEventArgs e)
+        private void btn1_Click(object sender, EventArgs e)
         {
             try
             {
-                txtError.Text = "";
+                lblError.Text = "";
 
                 if (string.IsNullOrWhiteSpace(txtTenKH.Text))
                 {
-                    txtError.Text = "Vui lòng nhập họ tên khách hàng!";
+                    lblError.Text = "Vui lòng nhập họ tên khách hàng!";
                     return;
                 }
                 if (string.IsNullOrWhiteSpace(txtSDT.Text))
                 {
-                    txtError.Text = "Vui lòng nhập số điện thoại!";
+                    lblError.Text = "Vui lòng nhập số điện thoại!";
                     return;
                 }
                 if (string.IsNullOrWhiteSpace(txtCCCD.Text))
                 {
-                    txtError.Text = "Vui lòng nhập CCCD!";
+                    lblError.Text = "Vui lòng nhập CCCD!";
                     return;
                 }
                 if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
                 {
-                    txtError.Text = "Vui lòng nhập địa chỉ!";
+                    lblError.Text = "Vui lòng nhập địa chỉ!";
                     return;
                 }
 
@@ -77,7 +77,7 @@ namespace QuanLyKhachHang
                     SDT = txtSDT.Text ?? "",
                     Email = txtEmail.Text ?? "",
                     GioiTinh = txtGioiTinh.Text ?? "",
-                    NgaySinh = dpNgaySinh.SelectedDate ?? DateTime.Now,
+                    NgaySinh = dpNgaySinh.Value,
                     CCCD = txtCCCD.Text ?? "",
                     DiaChi = txtDiaChi.Text ?? "",
                     MaGH = string.IsNullOrWhiteSpace(txtMaGH.Text) ? null : txtMaGH.Text
@@ -93,33 +93,33 @@ namespace QuanLyKhachHang
                         SDT_GH = txtSDT_GH.Text ?? "",
                         Email_GH = txtEmail_GH.Text ?? "",
                         GioiTinh_GH = txtGioiTinh_GH.Text ?? "",
-                        NgaySinh_GH = dpNgaySinh_GH.SelectedDate ?? DateTime.Now,
+                        NgaySinh_GH = dpNgaySinh_GH.Value,
                         CCCD_GH = txtCCCD_GH.Text ?? "",
                         DiaChi_GH = txtDiaChi_GH.Text ?? "",
-                        QuanHe = txtQuanHe_GH.Text ?? ""
+                        QuanHe = txtQuanHe.Text ?? ""
                     };
                 }
 
                 _controller.LuuKhachHang(kh, gh, _isEditMode);
 
                 string msg = _isEditMode ? "Cập nhật khách hàng thành công!" : "Tiếp nhận khách hàng thành công!";
-                MessageBox.Show(msg, "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(msg, "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 ResetForm();
             }
             catch (Exception ex)
             {
-                txtError.Text = ex.Message;
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                lblError.Text = ex.Message;
+                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void Btn2_Click(object sender, RoutedEventArgs e)
+        private void btn2_Click(object sender, EventArgs e)
         {
             ResetForm();
         }
 
-        private void Btn3_Click(object sender, RoutedEventArgs e)
+        private void btn3_Click(object sender, EventArgs e)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace QuanLyKhachHang
                 var gh = result.NguoiGiamHo;
                 if (kh == null)
                 {
-                    MessageBox.Show($"Không tìm thấy khách hàng!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Không tìm thấy khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
@@ -143,7 +143,7 @@ namespace QuanLyKhachHang
                 txtEmail.Text = kh.Email ?? "";
                 txtCCCD.Text = kh.CCCD ?? "";
                 txtDiaChi.Text = kh.DiaChi ?? "";
-                dpNgaySinh.SelectedDate = kh.NgaySinh;
+                dpNgaySinh.Value = kh.NgaySinh;
                 txtGioiTinh.Text = kh.GioiTinh ?? "";
 
                 txtMaGH.Text = !string.IsNullOrWhiteSpace(kh.MaGH) ? kh.MaGH : _controller.GenerateMaGH();
@@ -153,19 +153,19 @@ namespace QuanLyKhachHang
                 txtCCCD_GH.Text = gh?.CCCD_GH ?? "";
                 txtDiaChi_GH.Text = gh?.DiaChi_GH ?? "";
                 txtGioiTinh_GH.Text = gh?.GioiTinh_GH ?? "";
-                txtQuanHe_GH.Text = gh?.QuanHe ?? "";
-                dpNgaySinh_GH.SelectedDate = gh?.NgaySinh_GH ?? DateTime.Now;
+                dpNgaySinh_GH.Value = gh?.NgaySinh_GH ?? DateTime.Now;
+                txtQuanHe.Text = gh?.QuanHe ?? "";
 
-                btn1.Content = "Cập nhật khách hàng";
-                txtError.Text = "Đã tìm thấy. Hãy chỉnh sửa và nhấn Cập nhật.";
+                btn1.Text = "Cập nhật";
+                lblError.Text = "Đã tìm thấy. Hãy chỉnh sửa và nhấn Cập nhật.";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void Btn4_Click(object sender, RoutedEventArgs e)
+        private void btn4_Click(object sender, EventArgs e)
         {
             try
             {
@@ -176,80 +176,66 @@ namespace QuanLyKhachHang
                 var result = MessageBox.Show(
                     $"Bạn có chắc muốn xóa khách hàng: {maKH}?",
                     "Xác nhận xóa",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
 
-                if (result == MessageBoxResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     _controller.XoaKhachHang(maKH);
-                    MessageBox.Show("Xóa thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Xóa thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResetForm();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void Btn5_Click(object sender, RoutedEventArgs e)
+        private void btn5_Click(object sender, EventArgs e)
         {
             if (!_isEditMode)
             {
-                MessageBox.Show("Vui lòng tìm khách hàng trước!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Vui lòng tìm khách hàng trước!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            Btn1_Click(this, new RoutedEventArgs());
+            btn1_Click(this, EventArgs.Empty);
         }
 
-        private void Btn6_Click(object sender, RoutedEventArgs e)
+        private void btn6_Click(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
+            Application.Exit();
         }
 
         private string PromptForInput(string prompt)
         {
-            var dialog = new Window
+            Form promptForm = new Form()
             {
-                Title = "Nhập thông tin",
-                Width = 420,
-                MinHeight = 190,
-                SizeToContent = SizeToContent.Height,
-                ResizeMode = ResizeMode.NoResize,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Owner = this,
-                Background = System.Windows.Media.Brushes.White
+                Width = 440,
+                Height = 200,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = "Nhập thông tin",
+                StartPosition = FormStartPosition.CenterParent,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                BackColor = Color.White
             };
+            Label textLabel = new Label() { Left = 15, Top = 15, Width = 390, Height = 36, AutoEllipsis = true, Text = prompt };
+            TextBox textBox = new TextBox() { Left = 15, Top = 60, Width = 390, Height = 30 };
+            Button confirmation = new Button() { Text = "OK", Left = 250, Width = 70, Top = 105, DialogResult = DialogResult.OK };
+            Button cancel = new Button() { Text = "Hủy", Left = 335, Width = 70, Top = 105, DialogResult = DialogResult.Cancel };
+            
+            confirmation.Click += (sender, e) => { promptForm.Close(); };
+            cancel.Click += (sender, e) => { promptForm.Close(); };
+            
+            promptForm.Controls.Add(textBox);
+            promptForm.Controls.Add(confirmation);
+            promptForm.Controls.Add(cancel);
+            promptForm.Controls.Add(textLabel);
+            promptForm.AcceptButton = confirmation;
+            promptForm.CancelButton = cancel;
 
-            var grid = new Grid();
-            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-
-            var label = new TextBlock { Text = prompt, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(15, 10, 15, 10) };
-            Grid.SetRow(label, 0);
-            grid.Children.Add(label);
-
-            var textBox = new TextBox { Margin = new Thickness(15, 0, 15, 10), Padding = new Thickness(8), Height = 35 };
-            Grid.SetRow(textBox, 1);
-            grid.Children.Add(textBox);
-
-            var btnPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(15, 10, 15, 10) };
-            Grid.SetRow(btnPanel, 2);
-
-            var okBtn = new Button { Content = "OK", Width = 70, Margin = new Thickness(5), Padding = new Thickness(8) };
-            okBtn.Click += (s, e) => dialog.DialogResult = true;
-
-            var cancelBtn = new Button { Content = "Hủy", Width = 70, Margin = new Thickness(5), Padding = new Thickness(8) };
-            cancelBtn.Click += (s, e) => dialog.DialogResult = false;
-
-            btnPanel.Children.Add(okBtn);
-            btnPanel.Children.Add(cancelBtn);
-            grid.Children.Add(btnPanel);
-
-            dialog.Content = grid;
-            return dialog.ShowDialog() == true ? textBox.Text : "";
+            return promptForm.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
-
     }
 }
