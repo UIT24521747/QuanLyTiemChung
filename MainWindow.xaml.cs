@@ -250,6 +250,5 @@ namespace QuanLyKhachHang
             dialog.Content = grid;
             return dialog.ShowDialog() == true ? textBox.Text : "";
         }
-
     }
 }
