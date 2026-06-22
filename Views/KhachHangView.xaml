@@ -1,0 +1,186 @@
+<UserControl x:Class="QuanLyKhachHang.Views.KhachHangView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F0F0F0">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="22,16,22,16">
+
+            <TextBlock Text="Đăng ký thông tin khách hàng"
+                       FontSize="28" FontWeight="Bold" Foreground="#1F3045" Margin="0,0,0,14"/>
+
+            <!-- Row 1: MaKH(auto) | GioiTinh(text) | NgaySinh -->
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1.4*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Mã khách hàng" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtMaKH" Style="{StaticResource InputStyle}" IsReadOnly="True" Background="#E9EEF6"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Giới tính *" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtGioiTinh" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: Nam, Nữ"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Ngày sinh *" Style="{StaticResource FieldLabelStyle}"/>
+                    <DatePicker x:Name="dpNgaySinh" Style="{StaticResource DateStyle}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Row 2: Họ tên -->
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="Họ tên *" Style="{StaticResource FieldLabelStyle}"/>
+                <TextBox x:Name="txtTenKH" Style="{StaticResource InputStyle}"
+                         Tag="Ví dụ: Nguyễn Văn An"/>
+            </StackPanel>
+
+            <!-- Row 3: CCCD | SĐT | Email -->
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1.5*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="CCCD *" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtCCCD" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: 079090112233"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="SĐT *" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtSDT" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: 0909123456"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Email" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtEmail" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: email@example.com"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Row 4: Địa chỉ -->
+            <StackPanel Margin="0,0,0,14">
+                <TextBlock Text="Địa chỉ *" Style="{StaticResource FieldLabelStyle}"/>
+                <TextBox x:Name="txtDiaChi" Style="{StaticResource InputStyle}"
+                         Tag="Ví dụ: 123 Nguyễn Văn Cừ, Quận 1, TP.HCM"/>
+            </StackPanel>
+
+            <!-- Guardian section -->
+            <TextBlock Text="Thông tin người giám hộ" Style="{StaticResource SectionLabelStyle}" Margin="0,0,0,4"/>
+            <Border Background="#EBF0FA" BorderBrush="#C7D3E8" BorderThickness="1" Padding="10,6" Margin="0,0,0,10">
+                <TextBlock Foreground="#5A6A7E" FontSize="13"
+                           Text="[i] Bắt buộc khi khách hàng dưới độ tuổi quy định."/>
+            </Border>
+
+            <!-- GH Row 1: MaGH(auto) | TenGH | QuanHe -->
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Mã người giám hộ" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtMaGH" Style="{StaticResource InputStyle}" IsReadOnly="True" Background="#E9EEF6"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Họ tên người giám hộ" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtTenGH" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: Trần Văn Bình"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Quan hệ" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtQuanHe_GH" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: Cha, Mẹ"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- GH Row 2: CCCD_GH | SDT_GH | DiaChi_GH -->
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1.5*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="CCCD" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtCCCD_GH" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: 079080001234"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="SĐT" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtSDT_GH" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: 0901234567"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Địa chỉ" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtDiaChi_GH" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: 456 Lê Lợi, Quận 1, TP.HCM"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- GH Row 3: GioiTinh(text) | Email -->
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="1.5*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Giới tính" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtGioiTinh_GH" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: Nam, Nữ"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Email" Style="{StaticResource FieldLabelStyle}"/>
+                    <TextBox x:Name="txtEmail_GH" Style="{StaticResource InputStyle}"
+                             Tag="Ví dụ: giamdoc@email.com"/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock x:Name="txtError" Foreground="#B91C1C" FontSize="13"
+                       TextWrapping="Wrap" Margin="0,4,0,10"/>
+
+            <Grid Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="btn1" Content="Tiếp nhận khách hàng"
+                        Click="Btn1_Click" Style="{StaticResource ActionButtonStyle}"
+                        HorizontalAlignment="Left" Margin="0" Padding="14,8"/>
+                <Button Grid.Column="2" Content="Tra cứu khách hàng"
+                        Click="Btn3_Click" Style="{StaticResource ActionButtonStyle}"
+                        HorizontalAlignment="Left" Margin="0" Padding="14,8"/>
+                <Button Grid.Column="4" Content="Xóa"
+                        Click="Btn4_Click" Style="{StaticResource DangerButtonStyle}"
+                        HorizontalAlignment="Left" Margin="0" Padding="14,8"/>
+                <Button Grid.Column="6" Content="Làm mới"
+                        Click="Btn2_Click" Style="{StaticResource ActionButtonStyle}"
+                        HorizontalAlignment="Left" Margin="0" Padding="14,8"/>
+                <Button Grid.Column="8" Content="Thoát"
+                        Click="Btn6_Click" Style="{StaticResource ActionButtonStyle}"
+                        HorizontalAlignment="Right" Margin="0" Padding="14,8"/>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

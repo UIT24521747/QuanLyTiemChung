@@ -11,6 +11,7 @@ namespace QuanLyKhachHang.Controllers
 
         public string GenerateMaKH() => "KH" + DateTime.Now.ToString("yyMMddHHmmss");
         public string GenerateMaGH() => "GH" + DateTime.Now.ToString("yyMMddHHmmss");
+        public int GetSoTuoiCanGiamHo() => _model.GetSoTuoiCanGiamHo();
 
         public void LuuKhachHang(KhachHangDTO kh, NguoiGiamHoDTO? gh, bool isUpdate = false)
         {
