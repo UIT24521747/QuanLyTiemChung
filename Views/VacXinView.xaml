@@ -1,6 +1,7 @@
 <UserControl x:Class="QuanLyKhachHang.Views.VacXinView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root"
              Background="#F0F0F0">
     <Grid Margin="22,16,22,16">
         <Grid.RowDefinitions>
@@ -13,7 +14,7 @@
         <TextBlock Grid.Row="0" Text="Lập Danh Mục Vắc-xin"
                    FontSize="28" FontWeight="Bold" Foreground="#1F3045" Margin="0,0,0,14"/>
 
-        <Border Grid.Row="1" Background="White" BorderBrush="#C7D3E8" BorderThickness="1">
+        <Border Grid.Row="1" Background="White" BorderBrush="#C7D3E8" BorderThickness="1" CornerRadius="6" ClipToBounds="True">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -37,30 +38,43 @@
                           RowBackground="White"
                           AlternatingRowBackground="#F8FAFC"
                           BorderThickness="0"
-                          FontSize="15">
+                          FontSize="13"
+                          RowHeight="32">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </DataGrid.CellStyle>
 
                     <DataGrid.Columns>
 
-                        <!-- STT: auto row number, gray -->
-                        <DataGridTextColumn Header="STT" Binding="{Binding RowNum}" IsReadOnly="True" Width="50">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Background" Value="#E9EEF6"/>
-                                    <Setter Property="Padding" Value="4,6"/>
+                        <!-- STT: Stretch cell so Border fills full row height -->
+                        <DataGridTemplateColumn Header="STT" Width="50" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                                 </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="#E9EEF6">
+                                        <TextBlock Text="{Binding RowNum}" FontSize="13"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-                        <!-- Tên Vắc-xin: with placeholder "Ví dụ: Phế cầu, Thủy đậu..." -->
+                        <!-- Tên Vắc-xin: with placeholder "Phế cầu, Thủy đậu..." -->
                         <DataGridTemplateColumn Header="Tên Vắc-xin *" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <TextBlock Text="{Binding TenVacXin, TargetNullValue=''}"
                                                    Padding="6,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Ví dụ: Phế cầu, Thủy đậu..."
+                                        <TextBlock Text="Phế cầu, Thủy đậu..."
                                                    Foreground="#B8C0CC" Padding="6,0"
                                                    VerticalAlignment="Center" IsHitTestVisible="False">
                                             <TextBlock.Style>
@@ -83,49 +97,51 @@
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding TenVacXin, UpdateSourceTrigger=PropertyChanged}"
-                                             BorderThickness="0" Padding="6,4" FontSize="15"
+                                             BorderThickness="0" Padding="6,4" FontSize="13"
                                              VerticalContentAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- Loại Vắc-xin: ComboBox loaded from DB -->
-                        <DataGridComboBoxColumn x:Name="colLoaiVX"
-                                                Header="Loại Vắc-xin *"
-                                                DisplayMemberPath="TenLoaiVacXin"
-                                                SelectedValuePath="MaLoaiVacXin"
-                                                SelectedValueBinding="{Binding MaLoaiVacXin, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="145"/>
-
-                        <!-- Khoảng cách: with placeholder "Ví dụ: 30, 60..." -->
-                        <DataGridTemplateColumn Header="Khoảng Cách Giữa Các Mũi (Ngày)" Width="210">
+                        <!-- Loại Vắc-xin: display shows TenLoaiVacXin + ▾; edit shows ComboBox -->
+                        <DataGridTemplateColumn Header="Loại Vắc-xin *" Width="145">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <TextBlock Text="{Binding KhoangCach}"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center" Padding="4,0"/>
-                                        <TextBlock Text="Ví dụ: 30, 60..."
-                                                   Foreground="#B8C0CC" Padding="6,0"
-                                                   VerticalAlignment="Center" IsHitTestVisible="False">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding KhoangCach}" Value="0">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="22"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding TenLoaiVacXin}"
+                                                   VerticalAlignment="Center" Padding="6,0"/>
+                                        <TextBlock Grid.Column="1" Text="▾" FontSize="13"
+                                                   Foreground="#606878"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding LoaiVacXinList, ElementName=Root}"
+                                              SelectedItem="{Binding SelectedLoaiVacXin, UpdateSourceTrigger=PropertyChanged}"
+                                              DisplayMemberPath="TenLoaiVacXin"
+                                              Style="{StaticResource ComboStyle}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Khoảng Cách Giữa Các Mũi (Ngày)" Width="210">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding KhoangCach}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" Padding="4,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
                                     <TextBox Text="{Binding KhoangCach, UpdateSourceTrigger=PropertyChanged}"
-                                             BorderThickness="0" Padding="6,4" FontSize="15"
+                                             BorderThickness="0" Padding="6,4" FontSize="13"
                                              VerticalContentAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>

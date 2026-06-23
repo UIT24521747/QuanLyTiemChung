@@ -1,20 +1,35 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using QuanLyKhachHang.DTOs;
 
 namespace QuanLyKhachHang.ViewModels
 {
     public class VacXinRowVM : INotifyPropertyChanged
     {
         private int _rowNum;
-        private string? _tenVacXin;
-        private string? _maLoaiVacXin;
-        private int _soMuiTiem = 0;
+        private LoaiVacXinDTO? _selectedLoai;
         private int _khoangCach = 0;
 
         public int RowNum { get => _rowNum; set { _rowNum = value; Notify(); } }
+
+        public LoaiVacXinDTO? SelectedLoaiVacXin
+        {
+            get => _selectedLoai;
+            set
+            {
+                _selectedLoai = value;
+                Notify();
+                Notify(nameof(MaLoaiVacXin));
+                Notify(nameof(TenLoaiVacXin));
+            }
+        }
+
+        public string? MaLoaiVacXin => _selectedLoai?.MaLoaiVacXin;
+        public string? TenLoaiVacXin => _selectedLoai?.TenLoaiVacXin;
+
+        private string? _tenVacXin;
         public string? TenVacXin { get => _tenVacXin; set { _tenVacXin = value; Notify(); } }
-        public string? MaLoaiVacXin { get => _maLoaiVacXin; set { _maLoaiVacXin = value; Notify(); } }
-        public int SoMuiTiem { get => _soMuiTiem; set { _soMuiTiem = value; Notify(); } }
+
         public int KhoangCach { get => _khoangCach; set { _khoangCach = value; Notify(); } }
 
         public bool IsEmpty => string.IsNullOrWhiteSpace(TenVacXin);

@@ -1,5 +1,6 @@
 -- Seed data for testing — run AFTER QuanLyKhachHang.sql
 USE QuanLyKhachHang;
+SET NAMES 'utf8mb4';
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- -------------------------------------------------------

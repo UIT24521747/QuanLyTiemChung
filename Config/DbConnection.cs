@@ -14,7 +14,7 @@ namespace QuanLyKhachHang.Config
             string? user = Environment.GetEnvironmentVariable("DB_USER");
             string? pass = Environment.GetEnvironmentVariable("DB_PASS");
             string? port = Environment.GetEnvironmentVariable("DB_PORT");
-            string connString = $"Server={host};Port={port ?? "3306"};Database={db};Uid={user};Pwd={pass};CharSet=utf8;";
+            string connString = $"Server={host};Port={port ?? "3306"};Database={db};Uid={user};Pwd={pass};CharSet=utf8mb4;";
             
             return new MySqlConnection(connString);
         }

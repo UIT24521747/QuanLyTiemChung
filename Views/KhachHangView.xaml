@@ -24,7 +24,7 @@
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="Giới tính *" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtGioiTinh" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: Nam, Nữ"/>
+                             Tag="Nam, Nữ"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4">
                     <TextBlock Text="Ngày sinh *" Style="{StaticResource FieldLabelStyle}"/>
@@ -36,7 +36,7 @@
             <StackPanel Margin="0,0,0,8">
                 <TextBlock Text="Họ tên *" Style="{StaticResource FieldLabelStyle}"/>
                 <TextBox x:Name="txtTenKH" Style="{StaticResource InputStyle}"
-                         Tag="Ví dụ: Nguyễn Văn An"/>
+                         Tag="Nguyễn Văn An"/>
             </StackPanel>
 
             <!-- Row 3: CCCD | SĐT | Email -->
@@ -51,17 +51,17 @@
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="CCCD *" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtCCCD" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: 079090112233"/>
+                             Tag="079090112233"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="SĐT *" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtSDT" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: 0909123456"/>
+                             Tag="0909123456"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4">
                     <TextBlock Text="Email" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtEmail" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: email@example.com"/>
+                             Tag="email@example.com"/>
                 </StackPanel>
             </Grid>
 
@@ -69,12 +69,12 @@
             <StackPanel Margin="0,0,0,14">
                 <TextBlock Text="Địa chỉ *" Style="{StaticResource FieldLabelStyle}"/>
                 <TextBox x:Name="txtDiaChi" Style="{StaticResource InputStyle}"
-                         Tag="Ví dụ: 123 Nguyễn Văn Cừ, Quận 1, TP.HCM"/>
+                         Tag="123 Nguyễn Văn Cừ, Quận 1, TP.HCM"/>
             </StackPanel>
 
             <!-- Guardian section -->
             <TextBlock Text="Thông tin người giám hộ" Style="{StaticResource SectionLabelStyle}" Margin="0,0,0,4"/>
-            <Border Background="#EBF0FA" BorderBrush="#C7D3E8" BorderThickness="1" Padding="10,6" Margin="0,0,0,10">
+            <Border Background="#EBF0FA" BorderBrush="#C7D3E8" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,0,10">
                 <TextBlock Foreground="#5A6A7E" FontSize="13"
                            Text="[i] Bắt buộc khi khách hàng dưới độ tuổi quy định."/>
             </Border>
@@ -95,12 +95,12 @@
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="Họ tên người giám hộ" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtTenGH" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: Trần Văn Bình"/>
+                             Tag="Trần Văn Bình"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4">
                     <TextBlock Text="Quan hệ" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtQuanHe_GH" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: Cha, Mẹ"/>
+                             Tag="Cha, Mẹ"/>
                 </StackPanel>
             </Grid>
 
@@ -116,17 +116,17 @@
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="CCCD" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtCCCD_GH" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: 079080001234"/>
+                             Tag="079080001234"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="SĐT" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtSDT_GH" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: 0901234567"/>
+                             Tag="0901234567"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4">
                     <TextBlock Text="Địa chỉ" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtDiaChi_GH" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: 456 Lê Lợi, Quận 1, TP.HCM"/>
+                             Tag="456 Lê Lợi, Quận 1, TP.HCM"/>
                 </StackPanel>
             </Grid>
 
@@ -140,12 +140,12 @@
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="Giới tính" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtGioiTinh_GH" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: Nam, Nữ"/>
+                             Tag="Nam, Nữ"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="Email" Style="{StaticResource FieldLabelStyle}"/>
                     <TextBox x:Name="txtEmail_GH" Style="{StaticResource InputStyle}"
-                             Tag="Ví dụ: giamdoc@email.com"/>
+                             Tag="giamdoc@email.com"/>
                 </StackPanel>
             </Grid>
 

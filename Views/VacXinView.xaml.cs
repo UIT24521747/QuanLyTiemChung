@@ -13,6 +13,7 @@ namespace QuanLyKhachHang.Views
     {
         private readonly VacXinController _controller = new VacXinController();
         private readonly ObservableCollection<VacXinRowVM> _rows = new();
+        public List<LoaiVacXinDTO> LoaiVacXinList { get; private set; } = new();
 
         public VacXinView()
         {
@@ -28,7 +29,7 @@ namespace QuanLyKhachHang.Views
 
         private void LoadLoaiVacXin()
         {
-            try { colLoaiVX.ItemsSource = _controller.GetAllLoaiVacXin(); }
+            try { LoaiVacXinList = _controller.GetAllLoaiVacXin(); }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi tải loại vắc-xin: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -80,7 +81,8 @@ namespace QuanLyKhachHang.Views
                             TenVacXin            = row.TenVacXin,
                             MaLoaiVacXin         = row.MaLoaiVacXin,
                             SoMuiTiem            = 1,
-                            KhoangCachGiuaCacMui = row.KhoangCach
+                            KhoangCachGiuaCacMui = row.KhoangCach,
+                            TenLoaiVacXin        = row.TenLoaiVacXin
                         });
                         saved++;
                     }

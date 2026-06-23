@@ -45,6 +45,35 @@ Write-Host "Found : $ver" -ForegroundColor DarkGray
 Write-Host "Bin   : $MYSQL_BIN" -ForegroundColor DarkGray
 Write-Host "Port  : $TEST_PORT  (existing MySQL on 3306 is untouched)" -ForegroundColor DarkGray
 
+# ── Cleanup: kill by port so we never accidentally touch 3306 ────────────
+$global:_testPort = $TEST_PORT   # accessible from engine-event scope
+
+function Stop-TestMySQL {
+    param([string]$source = "finally")
+    Write-Host "`n[$source] Stopping test MySQL on port $TEST_PORT..." -ForegroundColor Yellow
+
+    # Primary: kill by owning PID of the test port
+    try {
+        $conn = Get-NetTCPConnection -LocalPort $TEST_PORT -State Listen -ErrorAction SilentlyContinue |
+                Select-Object -First 1
+        if ($conn) { Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue }
+    } catch {}
+
+    # Secondary: kill the tracked proc object directly
+    if ($null -ne $script:proc -and -not $script:proc.HasExited) {
+        Stop-Process -Id $script:proc.Id -Force -ErrorAction SilentlyContinue
+    }
+
+    Write-Host "Done. Port 3306 untouched." -ForegroundColor Yellow
+}
+
+# Backup for window-close / engine shutdown (fires before PowerShell process exits)
+Register-EngineEvent PowerShell.Exiting -Action {
+    $conn = Get-NetTCPConnection -LocalPort $global:_testPort -State Listen -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+    if ($conn) { Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue }
+} | Out-Null
+
 # ── Helpers ──────────────────────────────────────────────────────────────
 function Wait-Port([int]$port, [int]$timeoutSec = 30) {
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
@@ -60,15 +89,26 @@ function Wait-Port([int]$port, [int]$timeoutSec = 30) {
 }
 
 function Run-SQL([string]$file) {
-    $out = & cmd /c "`"$mysqlExe`" -u $DB_USER -p$DB_PASS -P $TEST_PORT < `"$file`" 2>&1"
-    $errors = $out | Where-Object { $_ -match "^ERROR" }
-    if ($errors) { Write-Warning ($errors -join "`n") }
-    $out | Where-Object { $_ -notmatch "Warning" -and $_.Trim() } |
-        ForEach-Object { Write-Host "  $_" }
-    return ($errors.Count -eq 0)
+    # Write a clean UTF-8-without-BOM temp file, then use chcp 65001 (UTF-8 codepage)
+    # so cmd.exe < redirection reads bytes correctly — avoids PowerShell pipeline encoding issues
+    $tmp = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), [System.IO.Path]::GetRandomFileName() + ".sql")
+    try {
+        $content = [System.IO.File]::ReadAllText($file, [System.Text.Encoding]::UTF8)
+        [System.IO.File]::WriteAllText($tmp, $content, (New-Object System.Text.UTF8Encoding $false))
+
+        $out = & cmd /c "chcp 65001 >nul && `"$mysqlExe`" -u $DB_USER -p$DB_PASS -P $TEST_PORT --default-character-set=utf8mb4 < `"$tmp`"" 2>&1
+
+        $errors = $out | Where-Object { ([string]$_) -match "^ERROR" }
+        if ($errors) { Write-Warning ($errors -join "`n") }
+        $out | Where-Object { ([string]$_) -notmatch "Warning" -and ([string]$_).Trim() } |
+            ForEach-Object { Write-Host "  $_" }
+        return ($errors.Count -eq 0)
+    } finally {
+        Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+    }
 }
 
-# ── 1. Check port not already in use ─────────────────────────────────────
+# ── 1. Check port not already in use ──────────────────────────────────────
 try {
     $chk = New-Object System.Net.Sockets.TcpClient
     $chk.Connect("127.0.0.1", $TEST_PORT)
@@ -79,9 +119,10 @@ try {
 
 # ── 2. Start OUR mysqld on TEST_PORT ─────────────────────────────────────
 Write-Host "Starting test MySQL on port $TEST_PORT..." -ForegroundColor Cyan
-$proc = Start-Process -FilePath $mysqldExe `
+$script:proc = Start-Process -FilePath $mysqldExe `
     -ArgumentList "--datadir=`"$DATA_DIR`" --port=$TEST_PORT" `
     -PassThru -WindowStyle Hidden
+$proc = $script:proc
 
 # ── 3. Wait for TEST_PORT ─────────────────────────────────────────────────
 Write-Host "Waiting for port $TEST_PORT..." -ForegroundColor Cyan
@@ -122,15 +163,14 @@ try {
     while ($true) {
         Start-Sleep -Seconds 2
         if ($proc.HasExited) {
-            Write-Warning "Test mysqld (PID $($proc.Id)) exited unexpectedly — restarting..."
-            $proc = Start-Process -FilePath $mysqldExe `
+            Write-Warning "Test mysqld exited unexpectedly — restarting..."
+            $script:proc = Start-Process -FilePath $mysqldExe `
                 -ArgumentList "--datadir=`"$DATA_DIR`" --port=$TEST_PORT" `
                 -PassThru -WindowStyle Hidden
+            $proc = $script:proc
             Start-Sleep -Seconds 3
         }
     }
 } finally {
-    Write-Host "`nStopping test MySQL (PID $($proc.Id))..." -ForegroundColor Yellow
-    Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
-    Write-Host "Done. Existing MySQL on 3306 untouched." -ForegroundColor Yellow
+    Stop-TestMySQL "finally"
 }

@@ -14,7 +14,7 @@ namespace QuanLyKhachHang.Views
     {
         private readonly PhieuNhapController _controller = new PhieuNhapController();
         private readonly ObservableCollection<LoVacXinRowVM> _rows = new();
-        private List<VacXinDTO> _vacXinList = new();
+        public List<VacXinDTO> VacXinList { get; private set; } = new();
 
         public PhieuNhapView()
         {
@@ -40,11 +40,7 @@ namespace QuanLyKhachHang.Views
 
         private void LoadVacXin()
         {
-            try
-            {
-                _vacXinList = _controller.GetAllVacXin();
-                colVacXin.ItemsSource = _vacXinList;
-            }
+            try { VacXinList = _controller.GetAllVacXin(); }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi tải danh mục vắc-xin: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -110,7 +106,7 @@ namespace QuanLyKhachHang.Views
                 };
 
                 var lots = new List<LoVacXinDTO>();
-                var vacLookup = _vacXinList.ToDictionary(v => v.MaVacXin ?? "");
+                var vacLookup = VacXinList.ToDictionary(v => v.MaVacXin ?? "");
 
                 foreach (var row in _rows.Where(r => !r.IsEmpty))
                 {
@@ -118,7 +114,8 @@ namespace QuanLyKhachHang.Views
                     if (row.SoLuongNhap <= 0)   throw new Exception($"Hàng {row.RowNum}: số lượng phải > 0!");
                     if (row.DonGia < 0)          throw new Exception($"Hàng {row.RowNum}: đơn giá không hợp lệ!");
 
-                    string tenVacXin = vacLookup.TryGetValue(row.MaVacXin ?? "", out var vx) ? vx.TenVacXin ?? "" : "";
+                    string tenVacXin = row.TenVacXin
+                        ?? (vacLookup.TryGetValue(row.MaVacXin ?? "", out var vx) ? vx.TenVacXin ?? "" : "");
 
                     lots.Add(new LoVacXinDTO
                     {
@@ -156,7 +153,7 @@ namespace QuanLyKhachHang.Views
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     Owner = Window.GetWindow(this)
                 };
-                var dg = new DataGrid { AutoGenerateColumns = false, IsReadOnly = true, ItemsSource = _vacXinList, Margin = new Thickness(10) };
+                var dg = new DataGrid { AutoGenerateColumns = false, IsReadOnly = true, ItemsSource = VacXinList, Margin = new Thickness(10) };
                 dg.Columns.Add(new DataGridTextColumn { Header = "Mã VX",    Binding = new System.Windows.Data.Binding("MaVacXin"),             Width = new DataGridLength(1, DataGridLengthUnitType.Star) });
                 dg.Columns.Add(new DataGridTextColumn { Header = "Tên",       Binding = new System.Windows.Data.Binding("TenVacXin"),            Width = new DataGridLength(2, DataGridLengthUnitType.Star) });
                 dg.Columns.Add(new DataGridTextColumn { Header = "Loại",      Binding = new System.Windows.Data.Binding("TenLoaiVacXin"),        Width = new DataGridLength(80) });

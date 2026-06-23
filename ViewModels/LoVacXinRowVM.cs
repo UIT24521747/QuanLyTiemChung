@@ -1,13 +1,14 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using QuanLyKhachHang.DTOs;
 
 namespace QuanLyKhachHang.ViewModels
 {
     public class LoVacXinRowVM : INotifyPropertyChanged
     {
         private int _rowNum;
-        private string? _maVacXin;
+        private VacXinDTO? _selectedVacXin;
         private string? _hangSanXuat;
         private DateTime? _ngayHetHan;
         private int _soLuongNhap;
@@ -15,11 +16,20 @@ namespace QuanLyKhachHang.ViewModels
 
         public int RowNum { get => _rowNum; set { _rowNum = value; Notify(); } }
 
-        public string? MaVacXin
+        public VacXinDTO? SelectedVacXin
         {
-            get => _maVacXin;
-            set { _maVacXin = value; Notify(); }
+            get => _selectedVacXin;
+            set
+            {
+                _selectedVacXin = value;
+                Notify();
+                Notify(nameof(MaVacXin));
+                Notify(nameof(TenVacXin));
+            }
         }
+
+        public string? MaVacXin => _selectedVacXin?.MaVacXin;
+        public string? TenVacXin => _selectedVacXin?.TenVacXin;
 
         public string? HangSanXuat
         {
@@ -47,7 +57,7 @@ namespace QuanLyKhachHang.ViewModels
 
         public decimal ThanhTien => SoLuongNhap * DonGia;
 
-        public bool IsEmpty => string.IsNullOrWhiteSpace(MaVacXin);
+        public bool IsEmpty => _selectedVacXin == null;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void Notify([CallerMemberName] string? n = null) =>
