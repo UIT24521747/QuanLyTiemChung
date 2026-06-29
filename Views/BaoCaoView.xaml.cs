@@ -15,7 +15,9 @@ namespace QuanLyKhachHang.Views
         {
             InitializeComponent();
 
-            txtNamVX.Text = DateTime.Today.Year.ToString();
+            // Process 1 & 2: default year and month to current
+            txtNamVX.Text    = DateTime.Today.Year.ToString();
+            txtNamThang.Text = DateTime.Today.Year.ToString();
 
             cboThang.ItemsSource   = Enumerable.Range(1, 12).ToList();
             cboThang.SelectedItem  = DateTime.Today.Month;
@@ -40,11 +42,13 @@ namespace QuanLyKhachHang.Views
                     r.TenLoaiVacXin,
                     r.TongLuotTiem,
                     r.DoanhThu,
-                    r.TiLe,
                 }).ToList();
 
+                int tongLuot = rows.Sum(r => r.TongLuotTiem);
+                txtTongLuotVX.Text = tongLuot > 0 ? tongLuot.ToString("N0") : "0";
+
                 decimal tongDoanhSo = rows.Sum(r => r.DoanhThu);
-                txtTongDoanhSoThang.Text = tongDoanhSo > 0 ? tongDoanhSo.ToString("N0") : "0";
+                txtTongDoanhSo.Text = tongDoanhSo.ToString("N0");
             }
             catch (Exception ex)
             {
@@ -52,7 +56,24 @@ namespace QuanLyKhachHang.Views
             }
         }
 
-private void BtnThoat_Click(object sender, RoutedEventArgs e) =>
+        // BM6.2
+        private void BtnBaoCaoThang_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(txtNamThang.Text.Trim(), out int nam) || nam < 2000)
+                    throw new Exception("Năm không hợp lệ!");
+
+                var rows = _controller.GetBaoCaoThang(nam);
+                dgThang.ItemsSource = rows;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnThoat_Click(object sender, RoutedEventArgs e) =>
             Application.Current.Shutdown();
     }
 }

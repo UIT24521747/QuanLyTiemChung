@@ -110,6 +110,7 @@
                             <DataTemplate>
                                 <Border Background="#E9EEF6">
                                     <TextBlock Text="{Binding RowNum}" FontSize="13"
+                                               Foreground="#1F3045"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </DataTemplate>
@@ -117,37 +118,61 @@
                     </DataGridTemplateColumn>
 
                     <!-- Tên Vắc-xin (readonly, auto from MaLo) -->
-                    <DataGridTextColumn Header="Tên Vắc-Xin" Binding="{Binding TenVacXin}" Width="*" MinWidth="130" IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="6,0"/>
-                                <Setter Property="Background" Value="#F4F6FA"/>
+                    <DataGridTemplateColumn Header="Tên Vắc-Xin" Width="*" MinWidth="130" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                             </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        </DataGridTemplateColumn.CellStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#E9EEF6">
+                                    <TextBlock Text="{Binding TenVacXin}" FontSize="13"
+                                               Foreground="#1F3045"
+                                               VerticalAlignment="Center" Padding="6,0"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
                     <!-- Loại Vắc-xin (readonly) -->
-                    <DataGridTextColumn Header="Loại Vắc-Xin" Binding="{Binding TenLoaiVacXin}" Width="100" IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="6,0"/>
-                                <Setter Property="Background" Value="#F4F6FA"/>
+                    <DataGridTemplateColumn Header="Loại Vắc-Xin" Width="100" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                             </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        </DataGridTemplateColumn.CellStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#E9EEF6">
+                                    <TextBlock Text="{Binding TenLoaiVacXin}" FontSize="13"
+                                               Foreground="#1F3045"
+                                               VerticalAlignment="Center" Padding="6,0"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
                     <!-- Hãng Sản Xuất (readonly) -->
-                    <DataGridTextColumn Header="Hãng Sản Xuất" Binding="{Binding HangSanXuat}" Width="110" IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="6,0"/>
-                                <Setter Property="Background" Value="#F4F6FA"/>
+                    <DataGridTemplateColumn Header="Hãng Sản Xuất" Width="110" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                             </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        </DataGridTemplateColumn.CellStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#E9EEF6">
+                                    <TextBlock Text="{Binding HangSanXuat}" FontSize="13"
+                                               Foreground="#1F3045"
+                                               VerticalAlignment="Center" Padding="6,0"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
                     <!-- Mã Lô: ComboBox -->
                     <DataGridTemplateColumn Header="Mã Lô *" Width="120">
@@ -226,6 +251,7 @@
                             <DataTemplate>
                                 <Border Background="#E9EEF6">
                                     <TextBlock Text="{Binding DonGia, StringFormat=N0}" FontSize="13"
+                                               Foreground="#1F3045"
                                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                                Padding="6,0"/>
                                 </Border>
@@ -245,6 +271,7 @@
                             <DataTemplate>
                                 <Border Background="#E9EEF6">
                                     <TextBlock Text="{Binding ThanhTien, StringFormat=N0}" FontSize="13"
+                                               Foreground="#1F3045"
                                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                                FontWeight="SemiBold" Padding="6,0"/>
                                 </Border>

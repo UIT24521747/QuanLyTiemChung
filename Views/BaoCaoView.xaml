@@ -20,6 +20,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -50,16 +51,23 @@
                                 Style="{StaticResource ActionButtonStyle}" Padding="16,9" Margin="0"/>
                     </StackPanel>
 
-                    <!-- Total -->
+                    <!-- Totals -->
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Tổng lượt tiêm trong tháng:"
+                                   Style="{StaticResource FieldLabelStyle}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox x:Name="txtTongLuotVX" Style="{StaticResource InputStyle}" Width="180"
+                                 IsReadOnly="True" Background="#E9EEF6" FontWeight="Bold"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Tổng doanh số theo tháng (VNĐ):"
                                    Style="{StaticResource FieldLabelStyle}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <TextBox x:Name="txtTongDoanhSoThang" Style="{StaticResource InputStyle}" Width="200"
+                        <TextBox x:Name="txtTongDoanhSo" Style="{StaticResource InputStyle}" Width="200"
                                  IsReadOnly="True" Background="#E9EEF6" FontWeight="Bold"/>
                     </StackPanel>
 
                     <!-- Result grid -->
-                    <Border Grid.Row="3" Background="White" BorderBrush="#C7D3E8" BorderThickness="1" CornerRadius="6" ClipToBounds="True">
+                    <Border Grid.Row="4" Background="White" BorderBrush="#C7D3E8" BorderThickness="1" CornerRadius="6" ClipToBounds="True">
                         <DataGrid x:Name="dgVacXin"
                                   AutoGenerateColumns="False" IsReadOnly="True"
                                   CanUserAddRows="False" CanUserSortColumns="True"
@@ -109,7 +117,84 @@
                                         <Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="HorizontalAlignment" Value="Right"/><Setter Property="Padding" Value="6,0"/></Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Header="Tỉ lệ (%)" Binding="{Binding TiLe, StringFormat=F1}" Width="90">
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- BM6.2: by month -->
+            <TabItem Header="Theo Tháng">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Input -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Năm lập báo cáo"
+                                   Style="{StaticResource FieldLabelStyle}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Grid.Column="1" x:Name="txtNamThang" Style="{StaticResource InputStyle}"
+                                 Tag="Năm hiện hành"/>
+                    </Grid>
+
+                    <!-- Buttons -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Lập báo cáo" Click="BtnBaoCaoThang_Click"
+                                Style="{StaticResource ActionButtonStyle}" Padding="16,9" Margin="0,0,8,0"/>
+                        <Button Content="→  Thoát" Click="BtnThoat_Click"
+                                Style="{StaticResource ActionButtonStyle}" Padding="16,9" Margin="0"/>
+                    </StackPanel>
+
+                    <!-- Result grid -->
+                    <Border Grid.Row="2" Background="White" BorderBrush="#C7D3E8" BorderThickness="1" CornerRadius="6" ClipToBounds="True">
+                        <DataGrid x:Name="dgThang"
+                                  AutoGenerateColumns="False" IsReadOnly="True"
+                                  CanUserAddRows="False" CanUserSortColumns="False"
+                                  GridLinesVisibility="All" HeadersVisibility="Column"
+                                  Background="White" RowBackground="White"
+                                  AlternatingRowBackground="#F8FAFC"
+                                  BorderThickness="0" FontSize="13" RowHeight="32">
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="STT" Width="50">
+                                    <DataGridTemplateColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Padding" Value="0"/>
+                                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.CellStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#E9EEF6">
+                                                <TextBlock Text="{Binding Thang}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Tháng" Binding="{Binding Thang}" Width="80">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="HorizontalAlignment" Value="Center"/><Setter Property="Padding" Value="6,0"/></Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Tổng lượt tiêm" Binding="{Binding TongLuotTiem}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="HorizontalAlignment" Value="Right"/><Setter Property="Padding" Value="6,0"/></Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="So với tháng trước (%)" Binding="{Binding SoVoiThangTruoc}" Width="180">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="HorizontalAlignment" Value="Right"/><Setter Property="Padding" Value="6,0"/></Style>
                                     </DataGridTextColumn.ElementStyle>
@@ -119,7 +204,6 @@
                     </Border>
                 </Grid>
             </TabItem>
-
 
         </TabControl>
     </Grid>

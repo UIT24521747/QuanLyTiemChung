@@ -39,13 +39,13 @@ ORDER BY DoanhThu DESC";
             return list;
         }
 
-        public List<BaoCaoDoanhSoThangDTO> GetDoanhSoTheoThang(int nam)
+        public List<BaoCaoThangDTO> GetBaoCaoThang(int nam)
         {
-            var map = new Dictionary<int, decimal>(); // Thang → DoanhThu
+            var map = new Dictionary<int, int>(); // Thang → TongLuotTiem
             using var conn = DatabaseConfig.GetConnection();
             conn.Open();
             const string sql = @"
-SELECT MONTH(pt.NgayTiem) AS Thang, SUM(ct.ThanhTien) AS DoanhThu
+SELECT MONTH(pt.NgayTiem) AS Thang, SUM(ct.SoLuong) AS TongLuotTiem
 FROM CHITIETTIEM ct
 JOIN PHIEUTIEM pt ON ct.MaPhieuTiem = pt.MaPhieuTiem
 WHERE YEAR(pt.NgayTiem) = @Nam
@@ -54,21 +54,21 @@ GROUP BY MONTH(pt.NgayTiem)";
             cmd.Parameters.AddWithValue("@Nam", nam);
             using var r = cmd.ExecuteReader();
             while (r.Read())
-                map[r.GetInt32(0)] = r.GetDecimal(1);
+                map[r.GetInt32(0)] = r.GetInt32(1);
 
-            var list = new List<BaoCaoDoanhSoThangDTO>();
+            var list = new List<BaoCaoThangDTO>();
             for (int t = 1; t <= 12; t++)
             {
-                decimal cur  = map.GetValueOrDefault(t, 0);
-                decimal prev = map.GetValueOrDefault(t - 1, 0);
+                int cur  = map.GetValueOrDefault(t, 0);
+                int prev = map.GetValueOrDefault(t - 1, 0);
                 string soSanh = "—";
                 if (t > 1 && prev > 0)
-                    soSanh = $"{(double)(cur / prev) * 100:F1}%";
-                list.Add(new BaoCaoDoanhSoThangDTO
+                    soSanh = $"{(double)cur / prev * 100:F1}%";
+                list.Add(new BaoCaoThangDTO
                 {
-                    Thang           = t,
-                    DoanhThu        = cur,
-                    SoVoiThangTruoc = soSanh,
+                    Thang            = t,
+                    TongLuotTiem     = cur,
+                    SoVoiThangTruoc  = soSanh,
                 });
             }
             return list;

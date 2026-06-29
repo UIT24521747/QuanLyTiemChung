@@ -6,13 +6,12 @@ namespace QuanLyKhachHang.DTOs
         public string? TenLoaiVacXin { get; set; }
         public int TongLuotTiem { get; set; }
         public decimal DoanhThu { get; set; }
-        public double TiLe { get; set; }       // % of total revenue
     }
 
-    public class BaoCaoDoanhSoThangDTO
+    public class BaoCaoThangDTO
     {
         public int Thang { get; set; }
-        public decimal DoanhThu { get; set; }
+        public int TongLuotTiem { get; set; }
         public string SoVoiThangTruoc { get; set; } = "—";
     }
 }
