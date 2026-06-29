@@ -10,7 +10,7 @@ namespace QuanLyKhachHang.Controllers
     {
         private readonly PhieuTiemModel _model = new();
 
-        public string GenerateMaPhieuTiem() => "PT" + DateTime.Now.ToString("yyMMddHHmmss");
+        public string GenerateMaPhieuTiem() => "PT" + DateTime.Now.ToString("yyMMddHHmmssfff");
 
         public List<KhachHangDTO> GetAllKhachHang() => _model.GetAllKhachHang();
 
@@ -27,7 +27,25 @@ namespace QuanLyKhachHang.Controllers
             // Build lookup from MaLo → detail
             var lookup = loDetails.ToDictionary(l => l.MaLo!);
 
-            foreach (var ct in chiTiets)
+            // Merge duplicate MaLo rows by summing SoLuong
+            var merged = chiTiets
+                .GroupBy(ct => ct.MaLo)
+                .Select(g =>
+                {
+                    var totalQty = g.Sum(ct => ct.SoLuong);
+                    var lo = lookup.TryGetValue(g.Key!, out var d) ? d : null;
+                    return new ChiTietTiemDTO
+                    {
+                        MaPhieuTiem = pt.MaPhieuTiem,
+                        MaLo        = g.Key,
+                        SoLuong     = totalQty,
+                        DonGia      = lo?.DonGia ?? 0,
+                        ThanhTien   = totalQty * (lo?.DonGia ?? 0)
+                    };
+                })
+                .ToList();
+
+            foreach (var ct in merged)
             {
                 if (!lookup.TryGetValue(ct.MaLo!, out var lo))
                     throw new Exception($"Lô '{ct.MaLo}' không tồn tại!");
@@ -55,7 +73,7 @@ namespace QuanLyKhachHang.Controllers
                 }
             }
 
-            _model.InsertPhieuTiem(pt, chiTiets);
+            _model.InsertPhieuTiem(pt, merged);
         }
     }
 }

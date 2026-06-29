@@ -40,8 +40,13 @@
             </StackPanel>
             <StackPanel Grid.Column="4">
                 <TextBlock Text="Loại vắc-xin" Style="{StaticResource FieldLabelStyle}"/>
-                <ComboBox x:Name="cboLoaiVacXin" Style="{StaticResource ComboStyle}"
-                          DisplayMemberPath="TenLoaiVacXin"/>
+                <ComboBox x:Name="cboLoaiVacXin" Style="{StaticResource ComboStyle}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TenLoaiVacXin}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
         </Grid>
 

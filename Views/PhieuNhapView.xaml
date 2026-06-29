@@ -111,8 +111,13 @@
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding VacXinList, ElementName=Root}"
                                           SelectedItem="{Binding SelectedVacXin, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="TenVacXin"
-                                          Style="{StaticResource ComboStyle}"/>
+                                          Style="{StaticResource ComboStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TenVacXin}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>

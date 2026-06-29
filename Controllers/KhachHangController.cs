@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using QuanLyKhachHang.DTOs;
 using QuanLyKhachHang.Models;
 
@@ -9,8 +10,12 @@ namespace QuanLyKhachHang.Controllers
     {
         private KhachHangModel _model = new KhachHangModel();
 
-        public string GenerateMaKH() => "KH" + DateTime.Now.ToString("yyMMddHHmmss");
-        public string GenerateMaGH() => "GH" + DateTime.Now.ToString("yyMMddHHmmss");
+        private static int _khSeq = 0;
+        private static int _ghSeq = 0;
+        public string GenerateMaKH() =>
+            "KH" + DateTime.Now.ToString("yyMMddHHmmss") + Interlocked.Increment(ref _khSeq).ToString("D3");
+        public string GenerateMaGH() =>
+            "GH" + DateTime.Now.ToString("yyMMddHHmmss") + Interlocked.Increment(ref _ghSeq).ToString("D3");
         public int GetSoTuoiCanGiamHo() => _model.GetSoTuoiCanGiamHo();
 
         public void LuuKhachHang(KhachHangDTO kh, NguoiGiamHoDTO? gh, bool isUpdate = false)

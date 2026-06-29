@@ -84,3 +84,27 @@ CREATE TABLE IF NOT EXISTS LOVACXIN (
     FOREIGN KEY (MaVacXin)    REFERENCES VACXIN(MaVacXin),
     FOREIGN KEY (MaPhieuNhap) REFERENCES PHIEUNHAP(MaPhieuNhap)
 );
+
+-- -------------------------------------------------------
+-- Sprint 5: Vaccination slip
+-- -------------------------------------------------------
+CREATE TABLE IF NOT EXISTS PHIEUTIEM (
+    MaPhieuTiem   VARCHAR(20)   PRIMARY KEY,
+    MaKH          VARCHAR(20),
+    NgayTiem      DATE,
+    BacSiThucHien VARCHAR(100),
+    TongTien      DECIMAL(18,2),
+    GhiChu        TEXT,
+    FOREIGN KEY (MaKH) REFERENCES KHACHHANG(MaKH)
+);
+
+CREATE TABLE IF NOT EXISTS CHITIETTIEM (
+    MaPhieuTiem VARCHAR(20),
+    MaLo        VARCHAR(20),
+    SoLuong     INT,
+    DonGia      DECIMAL(18,2),
+    ThanhTien   DECIMAL(18,2),
+    PRIMARY KEY (MaPhieuTiem, MaLo),
+    FOREIGN KEY (MaPhieuTiem) REFERENCES PHIEUTIEM(MaPhieuTiem),
+    FOREIGN KEY (MaLo)        REFERENCES LOVACXIN(MaLo)
+);

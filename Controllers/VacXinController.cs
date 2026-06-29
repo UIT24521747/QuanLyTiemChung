@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using QuanLyKhachHang.DTOs;
 using QuanLyKhachHang.Models;
 
@@ -9,7 +10,9 @@ namespace QuanLyKhachHang.Controllers
     {
         private readonly VacXinModel _model = new VacXinModel();
 
-        public string GenerateMaVacXin() => "VX" + DateTime.Now.ToString("yyMMddHHmmss");
+        private static int _vxSeq = 0;
+        public string GenerateMaVacXin() =>
+            "VX" + DateTime.Now.ToString("yyMMddHHmmss") + Interlocked.Increment(ref _vxSeq).ToString("D3");
 
         public List<LoaiVacXinDTO> GetAllLoaiVacXin() => _model.GetAllLoaiVacXin();
 

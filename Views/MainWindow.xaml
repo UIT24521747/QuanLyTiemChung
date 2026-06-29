@@ -42,6 +42,9 @@
             <TabItem Header="Đăng Ký Tiêm Phòng">
                 <views:PhieuTiemView/>
             </TabItem>
+            <TabItem Header="Báo Cáo">
+                <views:BaoCaoView/>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

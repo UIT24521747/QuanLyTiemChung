@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using QuanLyKhachHang.DTOs;
 using QuanLyKhachHang.Models;
 
@@ -10,9 +11,14 @@ namespace QuanLyKhachHang.Controllers
         private readonly PhieuNhapModel _model = new PhieuNhapModel();
         private readonly VacXinModel _vacXinModel = new VacXinModel();
 
-        public string GenerateMaPhieuNhap() => "PN" + DateTime.Now.ToString("yyMMddHHmmss");
+        private static int _pnSeq = 0;
+        private static int _loSeq = 0;
 
-        public string GenerateMaLo() => "LO" + DateTime.Now.ToString("yyMMddHHmmssfff");
+        public string GenerateMaPhieuNhap() =>
+            "PN" + DateTime.Now.ToString("yyMMddHHmmss") + Interlocked.Increment(ref _pnSeq).ToString("D3");
+
+        public string GenerateMaLo() =>
+            "LO" + DateTime.Now.ToString("yyMMddHHmmss") + Interlocked.Increment(ref _loSeq).ToString("D3");
 
         public List<VacXinDTO> GetAllVacXin() => _vacXinModel.GetAllVacXin();
 

@@ -34,8 +34,13 @@
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Khách hàng *" Style="{StaticResource FieldLabelStyle}"/>
-                <ComboBox x:Name="cboKhachHang" Style="{StaticResource ComboStyle}"
-                          DisplayMemberPath="TenKH"/>
+                <ComboBox x:Name="cboKhachHang" Style="{StaticResource ComboStyle}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TenKH}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
             <StackPanel Grid.Column="4">
                 <TextBlock Text="Ngày tiêm" Style="{StaticResource FieldLabelStyle}"/>
@@ -165,8 +170,13 @@
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding LoVacXinList, ElementName=Root}"
                                           SelectedItem="{Binding SelectedLoVacXin, UpdateSourceTrigger=PropertyChanged}"
-                                          DisplayMemberPath="MaLo"
-                                          Style="{StaticResource ComboStyle}"/>
+                                          Style="{StaticResource ComboStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding MaLo}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
