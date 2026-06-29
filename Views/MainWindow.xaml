@@ -39,6 +39,9 @@
             <TabItem Header="Tra Cứu Vắc-xin">
                 <views:TraCuuVacXinView/>
             </TabItem>
+            <TabItem Header="Đăng Ký Tiêm Phòng">
+                <views:PhieuTiemView/>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

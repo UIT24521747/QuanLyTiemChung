@@ -48,9 +48,19 @@ Write-Host "Port  : $TEST_PORT  (existing MySQL on 3306 is untouched)" -Foregrou
 # ── Cleanup: kill by port so we never accidentally touch 3306 ────────────
 $global:_testPort = $TEST_PORT   # accessible from engine-event scope
 
+function Drop-TestDB([int]$port) {
+    try {
+        & cmd /c "chcp 65001 >nul && `"$mysqlExe`" -u $DB_USER -p$DB_PASS -P $port -e `"DROP DATABASE IF EXISTS QuanLyKhachHang;`"" 2>&1 | Out-Null
+        Write-Host "Database dropped." -ForegroundColor Yellow
+    } catch {}
+}
+
 function Stop-TestMySQL {
     param([string]$source = "finally")
     Write-Host "`n[$source] Stopping test MySQL on port $TEST_PORT..." -ForegroundColor Yellow
+
+    # Drop DB while MySQL is still alive
+    Drop-TestDB $TEST_PORT
 
     # Primary: kill by owning PID of the test port
     try {
@@ -69,7 +79,11 @@ function Stop-TestMySQL {
 
 # Backup for window-close / engine shutdown (fires before PowerShell process exits)
 Register-EngineEvent PowerShell.Exiting -Action {
-    $conn = Get-NetTCPConnection -LocalPort $global:_testPort -State Listen -ErrorAction SilentlyContinue |
+    $port = $global:_testPort
+    try {
+        & cmd /c "chcp 65001 >nul && `"$mysqlExe`" -u $DB_USER -p$DB_PASS -P $port -e `"DROP DATABASE IF EXISTS QuanLyKhachHang;`"" 2>&1 | Out-Null
+    } catch {}
+    $conn = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue |
             Select-Object -First 1
     if ($conn) { Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue }
 } | Out-Null
@@ -117,21 +131,48 @@ try {
     exit 1
 } catch { <# port is free #> }
 
-# ── 2. Start OUR mysqld on TEST_PORT ─────────────────────────────────────
+$LOG_FILE = Join-Path $env:TEMP "test-mysqld-$TEST_PORT.log"
+
+# ── 2. Initialize data dir if needed ──────────────────────────────────────
+$mysqlPrivate = Join-Path $DATA_DIR "mysql"
+$justInitialized = $false
+if (-not (Test-Path $mysqlPrivate)) {
+    Write-Host "Data dir not initialized — running --initialize-insecure..." -ForegroundColor Cyan
+    if (-not (Test-Path $DATA_DIR)) { New-Item -ItemType Directory -Force $DATA_DIR | Out-Null }
+    $initOut = & "$mysqldExe" "--datadir=$DATA_DIR" "--initialize-insecure" "--user=root" 2>&1
+    $initOut | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray }
+    Write-Host "Initialization done." -ForegroundColor Green
+    $justInitialized = $true
+}
+
+# ── 3. Start OUR mysqld on TEST_PORT ─────────────────────────────────────
 Write-Host "Starting test MySQL on port $TEST_PORT..." -ForegroundColor Cyan
+Remove-Item $LOG_FILE -Force -ErrorAction SilentlyContinue
 $script:proc = Start-Process -FilePath $mysqldExe `
-    -ArgumentList "--datadir=`"$DATA_DIR`" --port=$TEST_PORT" `
+    -ArgumentList "--datadir=`"$DATA_DIR`" --port=$TEST_PORT --log-error=`"$LOG_FILE`"" `
     -PassThru -WindowStyle Hidden
 $proc = $script:proc
 
-# ── 3. Wait for TEST_PORT ─────────────────────────────────────────────────
+# ── 4. Wait for TEST_PORT ─────────────────────────────────────────────────
 Write-Host "Waiting for port $TEST_PORT..." -ForegroundColor Cyan
 if (-not (Wait-Port $TEST_PORT 30)) {
     Write-Error "MySQL did not start within 30 s."
+    if (Test-Path $LOG_FILE) {
+        Write-Host "`nmysqld error log:" -ForegroundColor Red
+        Get-Content $LOG_FILE | Select-Object -Last 20 | ForEach-Object { Write-Host "  $_" -ForegroundColor Red }
+    }
     Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
     exit 1
 }
 Write-Host "MySQL ready (PID $($proc.Id))." -ForegroundColor Green
+
+# ── 4b. Set root password after fresh init (initialize-insecure = no password) ──
+if ($justInitialized) {
+    Write-Host "Setting root password..." -ForegroundColor Cyan
+    $setPwd = "ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_PASS'; FLUSH PRIVILEGES;"
+    & cmd /c "chcp 65001 >nul && `"$mysqlExe`" -u root --connect-expired-password -P $TEST_PORT -e `"$setPwd`"" 2>&1 | Out-Null
+    Write-Host "Root password set." -ForegroundColor Green
+}
 
 # ── 4. Schema ─────────────────────────────────────────────────────────────
 Write-Host "Applying schema..." -ForegroundColor Cyan
@@ -165,7 +206,7 @@ try {
         if ($proc.HasExited) {
             Write-Warning "Test mysqld exited unexpectedly — restarting..."
             $script:proc = Start-Process -FilePath $mysqldExe `
-                -ArgumentList "--datadir=`"$DATA_DIR`" --port=$TEST_PORT" `
+                -ArgumentList "--datadir=`"$DATA_DIR`" --port=$TEST_PORT --log-error=`"$LOG_FILE`"" `
                 -PassThru -WindowStyle Hidden
             $proc = $script:proc
             Start-Sleep -Seconds 3
