@@ -18,8 +18,13 @@ namespace QuanLyKhachHang.Controllers
                 throw new Exception("Tuổi cần người giám hộ phải là số nguyên dương!");
             if (dto.SoNgayHanNhap <= 0)
                 throw new Exception("Số ngày hạn nhập phải là số nguyên dương!");
+
             _model.UpdateThamSo(dto);
         }
+
+        public (int violateKH, int violateLo) CheckThamSoViolations(ThamSoDTO dto) =>
+            (_model.CountKhachHangViolateGiamHo(dto.SoTuoiCanGiamHo),
+             _model.CountLoVacXinViolateHanNhap(dto.SoNgayHanNhap));
 
         public List<LoaiVacXinStatusDTO> GetAllLoaiVacXinWithStatus() =>
             _model.GetAllLoaiVacXinWithStatus();

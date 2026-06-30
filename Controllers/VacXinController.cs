@@ -14,6 +14,8 @@ namespace QuanLyKhachHang.Controllers
         public string GenerateMaVacXin() =>
             "VX" + DateTime.Now.ToString("yyMMddHHmmss") + Interlocked.Increment(ref _vxSeq).ToString("D3");
 
+        public bool IsTenVacXinDuplicate(string ten) => _model.ExistsByTenVacXin(ten);
+
         public List<LoaiVacXinDTO> GetAllLoaiVacXin() => _model.GetAllLoaiVacXin();
 
         public List<VacXinDTO> GetAllVacXin() => _model.GetAllVacXin();

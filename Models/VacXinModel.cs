@@ -49,6 +49,15 @@ namespace QuanLyKhachHang.Models
             return list;
         }
 
+        public bool ExistsByTenVacXin(string ten)
+        {
+            using var conn = DatabaseConfig.GetConnection();
+            conn.Open();
+            var cmd = new MySqlCommand("SELECT COUNT(*) FROM VACXIN WHERE TenVacXin=@Ten", conn);
+            cmd.Parameters.AddWithValue("@Ten", ten);
+            return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+        }
+
         public void InsertVacXin(VacXinDTO vx)
         {
             using var conn = DatabaseConfig.GetConnection();

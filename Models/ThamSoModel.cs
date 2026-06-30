@@ -34,6 +34,30 @@ namespace QuanLyKhachHang.Models
             cmd.ExecuteNonQuery();
         }
 
+        public int CountKhachHangViolateGiamHo(int newAge)
+        {
+            using var conn = DatabaseConfig.GetConnection();
+            conn.Open();
+            var cmd = new MySqlCommand(
+                "SELECT COUNT(*) FROM KHACHHANG WHERE MaGH IS NULL AND TIMESTAMPDIFF(YEAR, NgaySinh, CURDATE()) < @Age",
+                conn);
+            cmd.Parameters.AddWithValue("@Age", newAge);
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+
+        public int CountLoVacXinViolateHanNhap(int newDays)
+        {
+            using var conn = DatabaseConfig.GetConnection();
+            conn.Open();
+            var cmd = new MySqlCommand(
+                @"SELECT COUNT(*) FROM LOVACXIN v
+                  JOIN PHIEUNHAP p ON v.MaPhieuNhap = p.MaPhieuNhap
+                  WHERE DATEDIFF(v.NgayHetHan, p.NgayNhap) <= @Days",
+                conn);
+            cmd.Parameters.AddWithValue("@Days", newDays);
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+
         public List<LoaiVacXinStatusDTO> GetAllLoaiVacXinWithStatus()
         {
             var list = new List<LoaiVacXinStatusDTO>();

@@ -215,7 +215,19 @@ namespace QuanLyKhachHang.Views
                     throw new Exception("Tuổi phải là số nguyên!");
                 if (!int.TryParse(txtNgayHan.Text.Trim(), out int ngayHan))
                     throw new Exception("Số ngày phải là số nguyên!");
-                _ctrl.LuuThamSo(new ThamSoDTO { SoTuoiCanGiamHo = tuoi, SoNgayHanNhap = ngayHan });
+                var dto = new ThamSoDTO { SoTuoiCanGiamHo = tuoi, SoNgayHanNhap = ngayHan };
+                var (vKH, vLo) = _ctrl.CheckThamSoViolations(dto);
+                if (vKH > 0 || vLo > 0)
+                {
+                    var lines = new System.Text.StringBuilder();
+                    lines.AppendLine("Thay đổi này sẽ vi phạm dữ liệu hiện có:");
+                    if (vKH > 0) lines.AppendLine($"  • {vKH} khách hàng dưới {tuoi} tuổi không có người giám hộ");
+                    if (vLo > 0) lines.AppendLine($"  • {vLo} lô vắc-xin không đáp ứng giới hạn {ngayHan} ngày trước hết hạn");
+                    lines.AppendLine("\nVẫn tiếp tục lưu?");
+                    var result = MessageBox.Show(lines.ToString(), "Cảnh báo", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.No) return;
+                }
+                _ctrl.LuuThamSo(dto);
                 txtThamSoMsg.Text = "Đã cập nhật thành công.";
             }
             catch (Exception ex) { txtThamSoError.Text = ex.Message; }

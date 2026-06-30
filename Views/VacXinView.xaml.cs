@@ -70,6 +70,19 @@ namespace QuanLyKhachHang.Views
                 var toSave = _rows.Where(r => !r.IsEmpty).ToList();
                 if (toSave.Count == 0) { txtVxError.Text = "Chưa nhập thông tin vắc-xin!"; return; }
 
+                var dupNames = toSave
+                    .Where(r => !string.IsNullOrWhiteSpace(r.TenVacXin) && _controller.IsTenVacXinDuplicate(r.TenVacXin))
+                    .Select(r => r.TenVacXin)
+                    .ToList();
+                if (dupNames.Count > 0)
+                {
+                    string list = string.Join("\n  • ", dupNames);
+                    var result = MessageBox.Show(
+                        $"Các vắc-xin sau đã tồn tại trong hệ thống:\n  • {list}\n\nVẫn tiếp tục thêm?",
+                        "Tên trùng", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.No) return;
+                }
+
                 int saved = 0, skipped = 0;
                 foreach (var row in toSave)
                 {
@@ -134,7 +147,6 @@ namespace QuanLyKhachHang.Views
                 dg.Columns.Add(new DataGridTextColumn { Header = "Mã VX",    Binding = new System.Windows.Data.Binding("MaVacXin"),             Width = new DataGridLength(1, DataGridLengthUnitType.Star) });
                 dg.Columns.Add(new DataGridTextColumn { Header = "Tên",       Binding = new System.Windows.Data.Binding("TenVacXin"),            Width = new DataGridLength(2, DataGridLengthUnitType.Star) });
                 dg.Columns.Add(new DataGridTextColumn { Header = "Loại",      Binding = new System.Windows.Data.Binding("TenLoaiVacXin"),        Width = new DataGridLength(80) });
-                dg.Columns.Add(new DataGridTextColumn { Header = "Số mũi",    Binding = new System.Windows.Data.Binding("SoMuiTiem"),            Width = new DataGridLength(70) });
                 dg.Columns.Add(new DataGridTextColumn { Header = "KC (ngày)", Binding = new System.Windows.Data.Binding("KhoangCachGiuaCacMui"), Width = new DataGridLength(90) });
                 popup.Content = dg;
                 popup.ShowDialog();

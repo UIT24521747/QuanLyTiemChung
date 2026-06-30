@@ -4,3 +4,6 @@
 *.user
 *.suo
 .env
+Release/
+bin/
+mysql/
