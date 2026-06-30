@@ -14,9 +14,16 @@ INSERT INTO THAMSO (SoTuoiCanGiamHo, SoNgayHanNhap) VALUES (18, 30);
 -- -------------------------------------------------------
 DELETE FROM LOAIVACXIN;
 INSERT INTO LOAIVACXIN VALUES
-    ('A', 'Loại A'),
-    ('B', 'Loại B'),
-    ('C', 'Loại C');
+    ('LA', 'Loại A'),
+    ('LB', 'Loại B'),
+    ('LC', 'Loại C'),
+    ('LD', 'Loại D'),
+    ('LE', 'Loại E'),
+    ('LF', 'Loại F'),
+    ('LG', 'Loại G'),
+    ('LH', 'Loại H'),
+    ('LI', 'Loại I'),
+    ('LJ', 'Loại J');
 
 -- -------------------------------------------------------
 -- Sprint 1: Customers + Guardians
@@ -43,12 +50,12 @@ INSERT INTO KHACHHANG (MaKH, TenKH, SDT, Email, GioiTinh, NgaySinh, CCCD, DiaChi
 -- -------------------------------------------------------
 DELETE FROM VACXIN;
 INSERT INTO VACXIN (MaVacXin, TenVacXin, MaLoaiVacXin, SoMuiTiem, KhoangCachGiuaCacMui) VALUES
-    ('VX250101000100001', 'COVID-19 (Pfizer)',       'A', 2,  21),
-    ('VX250101000200002', 'Cúm mùa',                 'B', 1, 365),
-    ('VX250101000300003', 'Viêm gan B',              'C', 3,  30),
-    ('VX250101000400004', 'Sởi - Quai bị - Rubella', 'A', 2,  28),
-    ('VX250101000500005', 'Uốn ván',                 'B', 3,  60),
-    ('VX250101000600006', 'Viêm não Nhật Bản',       'C', 3,  14);
+    ('VX250101000100001', 'COVID-19 (Pfizer)',        'LA', 2,  21),
+    ('VX250101000200002', 'Cúm mùa',                 'LB', 1, 365),
+    ('VX250101000300003', 'Viêm gan B',              'LC', 3,  30),
+    ('VX250101000400004', 'Sởi - Quai bị - Rubella', 'LA', 2,  28),
+    ('VX250101000500005', 'Uốn ván',                 'LB', 3,  60),
+    ('VX250101000600006', 'Viêm não Nhật Bản',       'LC', 3,  14);
 
 -- -------------------------------------------------------
 -- Sprint 3: Import slips + lots

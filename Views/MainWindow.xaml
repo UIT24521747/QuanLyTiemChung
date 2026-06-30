@@ -45,6 +45,9 @@
             <TabItem Header="Báo Cáo">
                 <views:BaoCaoView/>
             </TabItem>
+            <TabItem Header="Thay Đổi Quy Định">
+                <views:ThayDoiQuyDinhView/>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

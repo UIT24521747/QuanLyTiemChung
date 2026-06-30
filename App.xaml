@@ -319,7 +319,7 @@
 
         <!-- ── TabItem ──────────────────────────────────────────────────────── -->
         <Style TargetType="TabItem">
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="11"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
             <Setter Property="Padding" Value="14,8"/>
