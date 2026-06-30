@@ -158,17 +158,33 @@
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- Ngày hết hạn: DatePicker — no placeholder, picker has its own display -->
-                    <DataGridTemplateColumn Header="Ngày hết hạn *" Width="100">
+                    <!-- Ngày hết hạn: calendar icon always visible to hint date picker -->
+                    <DataGridTemplateColumn Header="Ngày hết hạn *" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding NgayHetHan, StringFormat=dd/MM/yyyy, TargetNullValue=''}"
-                                           Padding="6,0" VerticalAlignment="Center"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="24"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="tbDate" Grid.Column="0"
+                                               Text="{Binding NgayHetHan, StringFormat=dd/MM/yyyy, TargetNullValue='Chọn ngày...'}"
+                                               Padding="6,0" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="📅" FontSize="12"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               Foreground="#606878" IsHitTestVisible="False"/>
+                                </Grid>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding NgayHetHan}" Value="{x:Null}">
+                                        <Setter TargetName="tbDate" Property="Foreground" Value="#B8C0CC"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <DatePicker SelectedDate="{Binding NgayHetHan, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DatePicker SelectedDate="{Binding NgayHetHan, UpdateSourceTrigger=PropertyChanged}"
+                                            Loaded="NhapLo_DatePicker_Loaded"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>

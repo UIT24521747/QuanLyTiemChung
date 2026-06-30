@@ -21,6 +21,7 @@ namespace QuanLyKhachHang.Views
         {
             InitializeComponent();
             Loaded += (_, _) => LoadCombos();
+            IsVisibleChanged += (_, e) => { if ((bool)e.NewValue) LoadCombos(); };
         }
 
         // Process 1: load LoaiVacXin; Process 2: load MaLo

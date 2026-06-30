@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using QuanLyKhachHang.Controllers;
 using QuanLyKhachHang.DTOs;
 using QuanLyKhachHang.ViewModels;
@@ -31,6 +32,8 @@ namespace QuanLyKhachHang.Views
                 RefreshRowNumbers();
                 UpdateTongTien();
             };
+
+            IsVisibleChanged += (_, e) => { if ((bool)e.NewValue) LoadVacXin(); };
 
             // Process 2,7: Nạp danh sách Vắc-xin on load
             LoadVacXin();
@@ -163,6 +166,21 @@ namespace QuanLyKhachHang.Views
                 popup.ShowDialog();
             }
             catch (Exception ex) { txtPnError.Text = ex.Message; }
+        }
+
+        private void NhapLo_DatePicker_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is not DatePicker dp) return;
+            dp.PreviewKeyDown += (s, ke) =>
+            {
+                if (ke.Key != Key.Return) return;
+                if (DateTime.TryParseExact(dp.Text,
+                        new[] { "dd/MM/yyyy", "d/M/yyyy", "dd/MM/yy", "d/M/yy", "yyyy-MM-dd" },
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.None, out var date))
+                    dp.SelectedDate = date;
+                dgLots.CommitEdit(DataGridEditingUnit.Cell, true);
+            };
         }
 
         // Làm mới

@@ -20,6 +20,12 @@ namespace QuanLyKhachHang.Views
         public ThayDoiQuyDinhView()
         {
             InitializeComponent();
+            IsVisibleChanged += (_, e) =>
+            {
+                if (!(bool)e.NewValue) return;
+                if (panelLoaiVacXin.Visibility == Visibility.Visible) LoadLoaiVacXin();
+                else LoadThamSo();
+            };
             ShowLoaiVacXin();
             LoadLoaiVacXin();
         }

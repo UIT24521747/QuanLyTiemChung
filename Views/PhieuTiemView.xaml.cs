@@ -31,6 +31,8 @@ namespace QuanLyKhachHang.Views
                 UpdateTongTien();
             };
 
+            IsVisibleChanged += (_, e) => { if ((bool)e.NewValue) LoadCombos(); };
+
             LoadCombos();
             ResetPhieu();
         }

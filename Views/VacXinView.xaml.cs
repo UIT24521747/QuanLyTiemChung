@@ -21,6 +21,8 @@ namespace QuanLyKhachHang.Views
             dgVacXin.ItemsSource = _rows;
             _rows.CollectionChanged += (_, _) => RefreshRowNumbers();
 
+            IsVisibleChanged += (_, e) => { if ((bool)e.NewValue) LoadLoaiVacXin(); };
+
             // Process 1,2,3,4: load data on screen open
             LoadLoaiVacXin();
             // Seed 4 empty rows matching spec
