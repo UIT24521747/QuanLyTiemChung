@@ -9,12 +9,25 @@ namespace QuanLyKhachHang.Views
     public partial class KhachHangView : UserControl
     {
         private readonly KhachHangController _controller = new KhachHangController();
+        private readonly ThamSoController _thamSoCtrl = new();
         private bool _isEditMode = false;
 
         public KhachHangView()
         {
             InitializeComponent();
+            IsVisibleChanged += (_, e) => { if ((bool)e.NewValue) LoadThamSo(); };
+            LoadThamSo();
             ResetForm();
+        }
+
+        private void LoadThamSo()
+        {
+            try
+            {
+                int age = _thamSoCtrl.GetThamSo().SoTuoiCanGiamHo;
+                txtGiamHoHint.Text = $"[i] Bắt buộc khi khách hàng dưới {age} tuổi (độ tuổi quy định).";
+            }
+            catch { txtGiamHoHint.Text = "[i] Bắt buộc khi khách hàng dưới độ tuổi quy định."; }
         }
 
         private void ResetForm()

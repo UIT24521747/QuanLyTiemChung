@@ -111,20 +111,26 @@ namespace QuanLyKhachHang.Views
                 var lots = new List<LoVacXinDTO>();
                 var vacLookup = VacXinList.ToDictionary(v => v.MaVacXin ?? "");
 
+                var seenMaLo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var row in _rows.Where(r => !r.IsEmpty))
                 {
-                    if (row.NgayHetHan == null) throw new Exception($"Hàng {row.RowNum}: chưa nhập ngày hết hạn!");
-                    if (row.SoLuongNhap <= 0)   throw new Exception($"Hàng {row.RowNum}: số lượng phải > 0!");
-                    if (row.DonGia < 0)          throw new Exception($"Hàng {row.RowNum}: đơn giá không hợp lệ!");
+                    if (string.IsNullOrWhiteSpace(row.MaLo))  throw new Exception($"Hàng {row.RowNum}: chưa nhập mã lô!");
+                    if (row.SelectedVacXin == null)            throw new Exception($"Hàng {row.RowNum}: chưa chọn vắc-xin!");
+                    if (row.NgayHetHan == null)                throw new Exception($"Hàng {row.RowNum}: chưa nhập ngày hết hạn!");
+                    if (row.SoLuongNhap <= 0)                  throw new Exception($"Hàng {row.RowNum}: số lượng phải > 0!");
+                    if (row.DonGia < 0)                        throw new Exception($"Hàng {row.RowNum}: đơn giá không hợp lệ!");
 
-                    string tenVacXin = row.TenVacXin
-                        ?? (vacLookup.TryGetValue(row.MaVacXin ?? "", out var vx) ? vx.TenVacXin ?? "" : "");
+                    string maLo = row.MaLo!.Trim();
+                    if (!seenMaLo.Add(maLo))
+                        throw new Exception($"Mã lô '{maLo}' bị trùng trong phiếu này!");
+                    if (_controller.MaLoExists(maLo))
+                        throw new Exception($"Mã lô '{maLo}' đã tồn tại trong hệ thống!");
 
                     lots.Add(new LoVacXinDTO
                     {
-                        MaLo        = _controller.GenerateMaLo(),
+                        MaLo        = row.MaLo!.Trim(),
                         MaVacXin    = row.MaVacXin,
-                        TenVacXin   = tenVacXin,
+                        TenVacXin   = row.TenVacXin ?? "",
                         NgayHetHan  = row.NgayHetHan.Value,
                         HangSanXuat = row.HangSanXuat ?? "",
                         SoLuongNhap = row.SoLuongNhap,

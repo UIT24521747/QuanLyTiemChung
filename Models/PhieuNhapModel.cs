@@ -58,6 +58,15 @@ namespace QuanLyKhachHang.Models
             }
         }
 
+        public bool MaLoExists(string maLo)
+        {
+            using var conn = DatabaseConfig.GetConnection();
+            conn.Open();
+            var cmd = new MySqlCommand("SELECT COUNT(*) FROM LOVACXIN WHERE MaLo=@MaLo", conn);
+            cmd.Parameters.AddWithValue("@MaLo", maLo);
+            return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+        }
+
         public List<PhieuNhapDTO> GetAllPhieuNhap()
         {
             var list = new List<PhieuNhapDTO>();

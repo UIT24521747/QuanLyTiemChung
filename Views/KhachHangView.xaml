@@ -75,8 +75,7 @@
             <!-- Guardian section -->
             <TextBlock Text="Thông tin người giám hộ" Style="{StaticResource SectionLabelStyle}" Margin="0,0,0,4"/>
             <Border Background="#EBF0FA" BorderBrush="#C7D3E8" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,0,10">
-                <TextBlock Foreground="#5A6A7E" FontSize="13"
-                           Text="[i] Bắt buộc khi khách hàng dưới độ tuổi quy định."/>
+                <TextBlock x:Name="txtGiamHoHint" Foreground="#5A6A7E" FontSize="13"/>
             </Border>
 
             <!-- GH Row 1: MaGH(auto) | TenGH | QuanHe -->

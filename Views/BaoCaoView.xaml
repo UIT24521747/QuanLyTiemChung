@@ -184,7 +184,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Tháng" Binding="{Binding Thang}" Width="80">
+                                <DataGridTextColumn Header="Tháng" Binding="{Binding Thang}" Width="70">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="HorizontalAlignment" Value="Center"/><Setter Property="Padding" Value="6,0"/></Style>
                                     </DataGridTextColumn.ElementStyle>
@@ -194,7 +194,7 @@
                                         <Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="HorizontalAlignment" Value="Right"/><Setter Property="Padding" Value="6,0"/></Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Header="So với tháng trước (%)" Binding="{Binding SoVoiThangTruoc}" Width="180">
+                                <DataGridTextColumn Header="So với tháng trước (%)" Binding="{Binding SoVoiThangTruoc}" Width="*">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="HorizontalAlignment" Value="Right"/><Setter Property="Padding" Value="6,0"/></Style>
                                     </DataGridTextColumn.ElementStyle>

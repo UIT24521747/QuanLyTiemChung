@@ -22,6 +22,8 @@ namespace QuanLyKhachHang.Controllers
 
         public List<VacXinDTO> GetAllVacXin() => _vacXinModel.GetAllVacXin();
 
+        public bool MaLoExists(string maLo) => _model.MaLoExists(maLo);
+
         public List<PhieuNhapDTO> GetAllPhieuNhap() => _model.GetAllPhieuNhap();
 
         public void LuuPhieuNhap(PhieuNhapDTO pn, List<LoVacXinDTO> lots)

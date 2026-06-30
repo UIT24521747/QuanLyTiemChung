@@ -60,8 +60,8 @@
                       RowBackground="White"
                       AlternatingRowBackground="#F8FAFC"
                       BorderThickness="0"
-                      FontSize="13"
-                      RowHeight="32"
+                      FontSize="11"
+                      RowHeight="26"
                       CellEditEnding="DgLots_CellEditEnding">
                     <DataGrid.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -73,7 +73,7 @@
                 <DataGrid.Columns>
 
                     <!-- STT: Stretch cell so Border fills full row height -->
-                    <DataGridTemplateColumn Header="STT" Width="50" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="STT" Width="32" IsReadOnly="True">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Padding" Value="0"/>
@@ -83,15 +83,51 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Background="#E9EEF6">
-                                    <TextBlock Text="{Binding RowNum}" FontSize="13"
+                                    <TextBlock Text="{Binding RowNum}" FontSize="11"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- Tên Vắc-xin: display shows TenVacXin + ▾; edit shows ComboBox -->
-                    <DataGridTemplateColumn Header="Tên Vắc-Xin *" Width="*" MinWidth="160">
+                    <!-- Mã Lô: manual input -->
+                    <DataGridTemplateColumn Header="Mã Lô *" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding MaLo, TargetNullValue=''}"
+                                               Padding="6,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="LO..."
+                                               Foreground="#B8C0CC" Padding="6,0"
+                                               VerticalAlignment="Center" IsHitTestVisible="False">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding MaLo}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding MaLo}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding MaLo, UpdateSourceTrigger=PropertyChanged}"
+                                         BorderThickness="0" Padding="6,4" FontSize="11"
+                                         VerticalContentAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Mã Vắc-xin: combo selector → auto-fills Tên + Loại -->
+                    <DataGridTemplateColumn Header="Mã Vắc-xin *" Width="90">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -99,9 +135,9 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="22"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding TenVacXin}"
+                                    <TextBlock Grid.Column="0" Text="{Binding MaVacXin, TargetNullValue=''}"
                                                VerticalAlignment="Center" Padding="6,0"/>
-                                    <TextBlock Grid.Column="1" Text="▾" FontSize="13"
+                                    <TextBlock Grid.Column="1" Text="▾" FontSize="11"
                                                Foreground="#606878"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Grid>
@@ -114,7 +150,7 @@
                                           Style="{StaticResource ComboStyle}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding TenVacXin}"/>
+                                            <TextBlock Text="{Binding MaVacXin}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -122,8 +158,44 @@
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
 
+                    <!-- Tên Vắc-xin: auto-filled read-only -->
+                    <DataGridTemplateColumn Header="Tên Vắc-xin" Width="90" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#E9EEF6">
+                                    <TextBlock Text="{Binding TenVacXin}" FontSize="11" Foreground="#1F3045"
+                                               VerticalAlignment="Center" Padding="6,0"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Loại Vắc-xin: auto-filled read-only -->
+                    <DataGridTemplateColumn Header="Loại Vắc-xin" Width="78" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="#E9EEF6">
+                                    <TextBlock Text="{Binding TenLoaiVacXin}" FontSize="11" Foreground="#1F3045"
+                                               VerticalAlignment="Center" Padding="6,0"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                     <!-- Hãng sản xuất: with placeholder -->
-                    <DataGridTemplateColumn Header="Hãng sản xuất" Width="100">
+                    <DataGridTemplateColumn Header="Hãng sản xuất" Width="75">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -152,14 +224,14 @@
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding HangSanXuat, UpdateSourceTrigger=PropertyChanged}"
-                                         BorderThickness="0" Padding="6,4" FontSize="13"
+                                         BorderThickness="0" Padding="6,4" FontSize="11"
                                          VerticalContentAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
 
                     <!-- Ngày hết hạn: calendar icon always visible to hint date picker -->
-                    <DataGridTemplateColumn Header="Ngày hết hạn *" Width="120">
+                    <DataGridTemplateColumn Header="Ngày hết hạn *" Width="88">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -170,7 +242,7 @@
                                     <TextBlock x:Name="tbDate" Grid.Column="0"
                                                Text="{Binding NgayHetHan, StringFormat=dd/MM/yyyy, TargetNullValue='Chọn ngày...'}"
                                                Padding="6,0" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" Text="📅" FontSize="12"
+                                    <TextBlock Grid.Column="1" Text="📅" FontSize="11"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"
                                                Foreground="#606878" IsHitTestVisible="False"/>
                                 </Grid>
@@ -190,7 +262,7 @@
                     </DataGridTemplateColumn>
 
                     <!-- Số lượng nhập: with placeholder -->
-                    <DataGridTemplateColumn Header="Số lượng nhập *" Width="100">
+                    <DataGridTemplateColumn Header="Số lượng nhập *" Width="80">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -217,14 +289,14 @@
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding SoLuongNhap, UpdateSourceTrigger=PropertyChanged}"
-                                         BorderThickness="0" Padding="6,4" FontSize="13"
+                                         BorderThickness="0" Padding="6,4" FontSize="11"
                                          VerticalContentAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
 
                     <!-- Đơn giá: with placeholder -->
-                    <DataGridTemplateColumn Header="Đơn giá *" Width="105">
+                    <DataGridTemplateColumn Header="Đơn giá *" Width="75">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -251,14 +323,14 @@
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding DonGia, UpdateSourceTrigger=PropertyChanged}"
-                                         BorderThickness="0" Padding="6,4" FontSize="13"
+                                         BorderThickness="0" Padding="6,4" FontSize="11"
                                          VerticalContentAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
 
                     <!-- Thành Tiền: Stretch cell so Border fills full row height -->
-                    <DataGridTemplateColumn Header="Thành Tiền" Width="110" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="Thành Tiền" Width="82" IsReadOnly="True">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Padding" Value="0"/>
@@ -268,7 +340,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Background="#E9EEF6">
-                                    <TextBlock Text="{Binding ThanhTien, StringFormat=N0}" FontSize="13"
+                                    <TextBlock Text="{Binding ThanhTien, StringFormat=N0}" FontSize="11"
                                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                                FontWeight="SemiBold" Padding="6,0"/>
                                 </Border>
@@ -277,10 +349,10 @@
                     </DataGridTemplateColumn>
 
                     <!-- Delete per row -->
-                    <DataGridTemplateColumn Header="" Width="40">
+                    <DataGridTemplateColumn Header="" Width="30">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="🗑" FontSize="13"
+                                <Button Content="🗑" FontSize="11"
                                         Background="Transparent" BorderThickness="0"
                                         Foreground="#DC2626" Cursor="Hand"
                                         Click="BtnDeleteLotRow_Click" Tag="{Binding}"/>
@@ -293,7 +365,7 @@
         </Border>
 
         <TextBlock Grid.Row="3" x:Name="txtPnError"
-                   Foreground="#B91C1C" FontSize="13"
+                   Foreground="#B91C1C" FontSize="11"
                    TextWrapping="Wrap" Margin="0,6,0,6"/>
 
         <Grid Grid.Row="4" Margin="0,6,0,0">

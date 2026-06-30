@@ -16,6 +16,9 @@ namespace QuanLyKhachHang.ViewModels
 
         public int RowNum { get => _rowNum; set { _rowNum = value; Notify(); } }
 
+        private string? _maLo;
+        public string? MaLo { get => _maLo; set { _maLo = value; Notify(); } }
+
         public VacXinDTO? SelectedVacXin
         {
             get => _selectedVacXin;
@@ -25,11 +28,13 @@ namespace QuanLyKhachHang.ViewModels
                 Notify();
                 Notify(nameof(MaVacXin));
                 Notify(nameof(TenVacXin));
+                Notify(nameof(TenLoaiVacXin));
             }
         }
 
-        public string? MaVacXin => _selectedVacXin?.MaVacXin;
-        public string? TenVacXin => _selectedVacXin?.TenVacXin;
+        public string? MaVacXin      => _selectedVacXin?.MaVacXin;
+        public string? TenVacXin     => _selectedVacXin?.TenVacXin;
+        public string? TenLoaiVacXin => _selectedVacXin?.TenLoaiVacXin;
 
         public string? HangSanXuat
         {
@@ -57,7 +62,7 @@ namespace QuanLyKhachHang.ViewModels
 
         public decimal ThanhTien => SoLuongNhap * DonGia;
 
-        public bool IsEmpty => _selectedVacXin == null;
+        public bool IsEmpty => _selectedVacXin == null && string.IsNullOrWhiteSpace(_maLo);
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void Notify([CallerMemberName] string? n = null) =>
